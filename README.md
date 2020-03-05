@@ -31,7 +31,7 @@ Mettez a jour vos sources en executant :
 Et enfin les différentes libraries 
 
 ```
->sudo apt-get install php7.2 php7.2-cli php7.2-common
+>sudo apt-get install php7.4 php7.4-cli php7.4-common
 ```
 
 Laravel réclame une minimum d’extension php pour fonctionner, en voici la liste : 
@@ -47,13 +47,13 @@ Laravel réclame une minimum d’extension php pour fonctionner, en voici la lis
 Voici la méthode d’installation pour ses fonctions : 
 
 ```
->sudo apt-get install php-curl php-gd php-json  php-mbstring php-intl php-mysql php-xml php7.2-zip
+>sudo apt-get install php-curl php-gd php-json  php-mbstring php-intl php-mysql php-xml php7.4-zip
 ```
 
 Ensuite viens les extensions spécifiques pour laravel :
 
 ```
->sudo apt-getinstall -y php7.2-bcmath  php7.2-ctype
+>sudo apt-getinstall -y php7.4-bcmath  php7.4-ctype
 ```
 
 On relance apache

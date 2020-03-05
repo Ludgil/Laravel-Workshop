@@ -193,3 +193,12 @@ Maintenant nous allons Installé Laravel Installer via la commande :
 composer global require laravel/installer
 ```
 
+
+
+
+# Let's Go 
+
+Voici le lien pour suivre les étapes du Workshop 
+
+
+[Laravel Workshop](https://ludgil.github.io/Laravel-Workshop/blog/index)

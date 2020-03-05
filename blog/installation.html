@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Workshop-Laravel</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>Laravel Workshop Project</h1>
+            <p class="contribution">Bacq E. - Gilotaux L. & Markus E.</p>
+        </header>
+    </div>
+        
+        <div class="main-page">
+
+            <div class="row">
+                
+                <div class="container">
+                    
+                    <!-- installation linux -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#linuxInstall" aria-expanded="false" aria-controls="linuxInstall">
+                            Installation : Linux
+                        </button>
+                    </p>
+                    <div class="collapse" id="linuxInstall">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                        <!--content  -->
+                        <p>Au préalable, nous vous conseillons l'installation d'un serveur <a href="https://doc.ubuntu-fr.org/lamp">Lamp.</a> </p>
+                        <ol>
+                            <li class="section-subtitle">Installation de php</li>
+                            <p>Dans un premier temps, il vous faut les pré-requis</p>
+
+                            <p class="style-console">sudo apt-get install software-properties-common python-software-properties
+                            </p>
+                            <p></p>
+                            <p>Ensuite ajouter "ondreJ PPA"</p>
+
+
+                            <p class="style-console">sudo apt-get-repository -y ppa:ondrej/php</p>
+                            <p class="style-console">sudo apt-get update</p class="style-console">
+
+                            <p></p>
+                            <p>Mettez a jour vos sources php en executant :</p>
+                            <p class="style-console">sudo apt-get install php -y</p>
+                            <p></p>
+                            <p>Et enfin les différentes librairies</p>
+                            <p>
+                            </p>
+                            <p class="style-console">sudo apt-get install php7.2 php7.2-cli php7.2-common</p>
+                            <p></p>
+                            <p>Laravel réclame un minimum d'extension php pour fonctionner, en voici la liste :</p>
+                            <ul>
+                                <li>OpenSSL</li>
+                                <li>PDO</li>
+                                <li>Mbstring</li>
+                                <li>Tokenizer</li>
+                                <li>XML</li>
+                                <li>Ctype</li>
+                                <li>Json</li>
+                                <li>BCMath</li>
+                            </ul>
+                            <p>Voici la méthode d'installation pour ses dépendances :</p>
+                            <p class="style-console">sudo apt-get install php-curl php-gd php-json php-mbstring php-intl php-mysql php-xml php7.2-zip</p>
+                            <p></p>
+                            <p>Ensuite viens les extensions spécifiques à Laravel : </p>
+                            <p></p>
+                            <p class="style-console">sudo apt-get install -y php7.2-bcmath php7.2-ctype</p>
+                            <p></p>
+                            <p>On relance apache :</p>
+                            <p class="style-console">sudo service apache2 reload</p>
+
+                            <li class="section-subtitle">Installation de Composer</li>
+                            <p>Laravel utilise les dépendances de php. Alors un petit tour par l'installation de composer est obligatoire.
+
+                            </p>
+                            <p></p>
+                            <p>Installation de curl:</p>
+                            <p class="style-console">sudo apt-get install curl -y</p>
+                            <p></p>
+                            <p>Téléchargement de composer</p>
+                            <p class="style-console">cd ~</p>
+                            <p class="style-console">sudo curl -s https://getcomposer.org/installer | php</p>
+                            <p></p>
+                            <p>Maintenant nous allons le rendre disponible globalement</p>
+                            <p class="style-console">sudo mv composer.phar /usr/local/bin/composer</p>
+                            <p></p>
+                            <p>Pour vérifier si composer est bien installer utiliser la commande :</p>
+                            <p class="style-console">composer</p>
+                            <p></p>
+                            <p>Vous devriez voir une liste de commande apparaitre.</p>
+                            <p>Maintenant nous allons installé Laravel via la commande</p>
+                            <p class="style-console">composer global require laravel/installer</p>
+                            <p></p>
+                            <p>Une fois terminer, nous allons pouvoir créer notre premier projet :)</p>
+
+                        </ol>
+
+                        </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <!-- ------------------ installation mac ------------------------- -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#macInstall" aria-expanded="false" aria-controls="macInstall">
+                            Installation : Mac
+                        </button>
+                    </p>
+                    <div class="collapse" id="macInstall">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                              <!--content  -->
+                              <p>Avant toute chose, il vous faut un HomeBrew qui est un gestionnaire de package pour macOs</p>
+                        <p>Pour l'installer, rien de plus simple, rendez-vous sur votre terminal :</p>
+                        <p class="style-console">/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</p>
+                        <p>Cette étape peut prendr epas mal de temps ...</p>
+                        <ol>
+
+                            <li class="section-subtitle">Installation de php</li>
+                            <p>Installation de php avec HomeBrew</p>
+
+                            <p class="style-console">brew install homebrew/php/php71
+                            </p>
+                            <p></p>
+                            <li class="section-subtitle">Installation de Composer</li>
+                            <p>Composer est un gestionnaire de dépendance PHP, il permet de télécharger des bibliothèques.</p>
+                            <p>Composer permet également de créer des projets Laravel pour installer composer:</p>
+                            <p></p>
+
+                            <p class="style-console">brew install homebrew/php/composer</p>
+                            <p></p>
+                            <p>Si l'installation est réussie, relancez votre terminal et tapez y la commande :</p>
+                            <p class="style-console">composer</p>
+                            <p></p>
+                            <p>Si tout est ok, un bon nombre de commande devrait apparaitre dans votre terminal. Bonne nouvelle !! Passons à la suite.</p>
+                            <p>Maintenant nous allons installé Laravel installer via la commande :</p>
+                            <p class="style-console">composer global require laravel/installer</p>
+                            <p></p>
+                            <p>Une fois terminer, nous allons pouvoir créer notre permier projet :)</p>
+
+                        </ol>
+                                
+
+                            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <!-- --------------  accordeoninstallation pc    ------------------->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#installPc" aria-expanded="false" aria-controls="installPc">
+                            Installation : Windows
+                        </button>
+                    </p>
+                    <div class="collapse" id="installPc">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                      <!--content  -->
+                      <ol>
+
+                        <li class="section-subtitle">Installation de php</li>
+                        <p>Au préalable, nous vous conseillons l'installation de <a href="https://blog.lws-hosting.com/creation-de-sites-web/utiliser-xampp-pour-creer-son-serveur-web">xampp</a></p>
+                        <p></p>
+                        <li class="section-subtitle">Installation de Composer</li>
+                        <p>Composer est un gestionnaire de package PHP.</p>
+                        <p>Pour l'installer sous windows, rendez-vous sur le site officiel et téléchargez le programme d'installation <a href="https://getcomposer.org/download/">Composer</a></p>
+                        <p>Au debut de l'installation, il vous sera demandé de préciser ou se trouve php.exe</p>
+                        <p>Rechercher dans votre système ou se trouve le dossier d'installation de xampp/wampp</p>
+                        <p>Exemple :</p>
+                        <p></p>
+                        <p class="style-console">C:\xampp\php</p>
+                        <p></p>
+                        <p>Si l'installation est réussie, relancez votre terminal et tapez y la commande :</p>
+                        <p></p>
+                        <p class="style-console">composer</p>
+                        <p></p>
+                        <p>Si tout est ok, un bon nombre de commande devrait apparaitre dans votre terminal. Bonne nouvelle !! Passons à la suite.</p>
+                        <p>Maintenant nous allons installé Laravel installer via la commande :</p>
+                        <p class="style-console">composer global require laravel/installer</p>
+                        <p></p>
+                        <p>Une fois terminer, nous allons pouvoir créer notre permier projet :)</p>
+
+                    </ol>
+                                
+
+               </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>

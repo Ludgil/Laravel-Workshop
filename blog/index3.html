@@ -1,0 +1,1210 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Workshop-Laravel</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>Laravel Workshop Project</h1>
+            <p class="contribution">Bacq E. - Gilotaux L. & Markus E.</p>
+        </header>
+        <div class="main-page">
+            <b style="color:#F34E39"><u>3ème Partie</u></b>
+            <!--  table des matières  -->
+            <div class="container the-index mt-3 ml-5">
+                Table des matières:
+                <ol class="ol-first">
+                    <li>
+                        <a href="index.html#section1" class="color-laravel">Création de notre projet</a>
+                        <ol class="ol-sec">
+                            <li><a href="index.html#section1a">configuration de notre projet</a></li>
+                        </ol>
+                    </li>
+                    <li>
+                        <a href="index.html#section2" class="color-laravel">La base (Eloquent & Migration)</a>
+                        <ol class="ol-sec">
+                            <li><a href="index.html#section2a">Les Models</a></li>
+                            <li><a href="index.html#section3a">Les Factory</a></li>
+                            <li><a href="index.html#section4a">Les Seeder</a></li>
+                        </ol>
+                    </li>
+                    <li>
+                        <a href="index2.html#section3" class="color-laravel">Les postes (Routes, Controller & Vue)</a>
+                    </li>
+                    <li>
+                        <a href="index3.html#section4" class="color-laravel">Quelques ajutements</a>
+                    </li>
+                    <li>
+                        <a href="index3.html#section5" class="color-laravel">Les Commentaires</a>
+                    </li>
+                    <li>
+                        <a href="index3;html#section6" class="color-laravel">Le Profil</a>
+                    </li>
+                </ol>
+            </div>
+            <!-- ---------------------------------- -->
+            <div class="row">
+                <div class="container">
+                    <a href="index3.html#section4" class="section-title">Quelques ajutements</a>
+                    <p>
+                        Lorsque nous rentrons dans notre poste, tout s'affiche correctement mais ne manque t'il pas
+                        quelque chose ? Comme faire pour retourner en arrière ? On pourrait faire une fonction
+                        javascript du type window.history.back() Mais le soucis ici c'est que nous
+                        avons une route de formulaire et une route store. Donc si nous revenions en arrière nous
+                        retombons toujours sur notre poste. Nous avons donc pensé au session...Si nous enregistrons
+                        l'adresse avant d'entrer dans notre poste, et faisons une redirection à la sortie du store ou de
+                        l'update, ça devrait le faire. Allons dans le fichier qui affiche tous nos postes.
+                    </p>
+                    <span class="style-folder">Open -> resources\views\Post\index.blade.php</span>
+                    <!-- accordeon modif Post factory -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#sessionhistory" aria-expanded="false" aria-controls="sessionhistory">
+                            Code final : session currentAdress : resources\views\Post\index.blade.php
+                        </button>
+                    </p>
+                    <div class="collapse" id="sessionhistory">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                <!--content  -->
+                @php
+                  session([&apos;history&apos;=&gt;\Request::getRequestUri()]);
+                @endphp
+            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>
+                        Maintenant allons sur la page qui affiche nos posts de façon unique.
+                    </p>
+                    <p>
+                        <span class="style-folder">Open -> resources\views\Post\show.blade.php</span> et nous ajoutons
+                        le lien qui nous permettera de revenir à la liste mais surtout de garder notre position dans
+                        la pagination. En dessous du &ltdiv> container.
+                    </p>
+                    <!-- accordeon modif post.show. -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#addreturnlist" aria-expanded="false" aria-controls="addreturnlist">
+                            Code final : show.blade.php : resources\views\Post\show.blade.php
+                        </button>
+                    </p>
+                    <div class="collapse" id="addreturnlist">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                          <!--content  -->
+                                &lt;a href=&quot;{{ session(&apos;history&apos;) }}&quot;&gt;Retour &agrave; la liste&lt;/a&gt;
+                        </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+
+                    <p>
+                        Histoire d'être en accord avec cette manière de faire allons dans l'édition de notre poste et
+                        donnons la possibilité d'annuler une modification. <span class="style-folder">Open ->
+                            resources\views\Post\edit.blade.php</span> et collez le code suivant.
+                    </p>
+                    <!-- accordeon modif edit.blade add return button -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#resetModif" aria-expanded="false" aria-controls="resetModif">
+                            Code final : add button return - resources\views\Post\edit.blade.php
+                        </button>
+                    </p>
+                    <div class="collapse" id="resetModif">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                <!--content  -->
+                &lt;!--A METTRE EN DESSOUS DU  BOUTON ' Mise A jour de l'article' --&gt;
+                &lt;a class=&quot;btn btn-primary&quot; href=&quot;{{ URL::previous()}}&quot;&gt;
+                    retour &lt;/a&gt; 
+            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>
+                        ça c'est fait ! Alors tant qu'on est dans le peaufinage ne trouvez-vous pas que notre pagination
+                        manque un peu de style. La pagination que l'on a est made in bootstrap et laravel nous donne un
+                        outils pour le customizer simplement. Allons dans notre console
+                        et faite cette commande. <span class="style-console">php
+                            artisan vendor:publish --tag=laravel-pagination</span> Maintenant si vous allez dans vos
+                        views vous avez un dossier vendor/pagination. <span class="style-folder">Open ->
+                            resources\views\vendor\pagination\bootstrap-4.blade.php</span> et mettez dans la class du
+                        premier &ltUL> ces deux class bootstrap 'justify-content-center mt-3'
+                    </p>
+                    <p>
+                        <a href="index3.html#section5" class="section-title">Les commentaires</a>
+
+                    </p>
+                    <p>
+                        Voilà pour le peaufinage et retournons dans notre Blog et ajoutons les commentaires. Nous
+                        n'allons pas mettre les commentaires directement dans notre vue post.show mais nous allons
+                        inclure depuis une vue Comments.show.
+                    </p>
+                    <p>
+                        <span class="style-folder">Open -> resources\views\Post\show.blade.php</span> et appelons notre
+                        vue juste avant le dernier &ltdiv> avec ce code : <span class="style-code">
+                            @include('Comment.show');</span> et créons là.
+                    </p>
+                    <span class="style-folder">Create & Open -> resources\views\Comment\show.blade.php </span> et entrer
+                    le code suivant.
+                    </p>
+
+                    <!-- accordeon AJOUT DES COMMENTAIRE -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#addcommentoshow" aria-expanded="false" aria-controls="addcommentoshow">
+                            Code final : add comment : resources\views\Post\show.blade.php
+                        </button>
+                    </p>
+                    <div class="collapse" id="addcommentoshow">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                <!--content  -->
+                @include(&apos;Comment.create&apos;)
+                @if ($posts-&gt;comments-&gt;count())
+                @foreach ($posts-&gt;comments as $comment)
+                &lt;div class=&quot;card w-100&quot;&gt;
+                &lt;div class=&quot;card-header&quot;&gt;
+                &lt;div class=&quot;d-inline&quot;&gt;
+                &lt;h3 class=&quot;d-inline&quot;&gt;{{ &apos;commentaire de : &apos; . $comment-&gt;user-&gt;name }}&lt;/h3&gt;
+                
+                @guest
+                @else
+                @if($posts-&gt;id == Auth::id()|| $comment-&gt;user_id == Auth::id() )
+                &lt;form id=&quot;form-delete&quot; method=&quot;POST&quot; class=&quot;d-inline float-right&quot;
+                action=&quot;{{ route(&apos;Comment.destroy&apos;, $comment-&gt;id)}}&quot;&gt;
+                @csrf
+                @method(&apos;DELETE&apos;)
+                &lt;button class=&quot;btn btn-delete btn-circle btn-outline-danger &quot; type=&apos;submit&apos;
+                title=&quot;Delete&quot;&gt;Delete&lt;/button&gt;
+                &lt;/form&gt;
+                @endif
+                @endguest
+                
+                &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;card-body&quot;&gt;
+                &lt;p&gt;{{ $comment-&gt;content }}&lt;/p&gt;
+                &lt;p&gt;{{ $comment-&gt;created_at }}&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+                
+                @endforeach
+                @endif
+
+            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>
+                        dans la foulée on créer le fichier suivant : <span class="style-folder">Create & Open ->
+                            resources\views\Comments\create.blade.php</span> et on colle le code suivant.
+                    </p>
+                    <!-- accordeon view add comment -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#addcomment" aria-expanded="false" aria-controls="addcomment">
+                            Code final : view Comments.create : resources\views\Comments\create.blade.php
+                        </button>
+                    </p>
+                    <div class="collapse" id="addcomment">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                <!--content  -->
+                &lt;div class=&quot;container&quot;&gt;
+                &lt;div class=&quot;row&quot;&gt;
+                    &lt;div class=&quot;w-100 pt-3&quot;&gt;
+                        &lt;div class=&quot;card&quot;&gt;
+                            &lt;div class=&quot;card-header&quot;&gt;Ajout d&apos;un commentaire&lt;/div&gt;
+                            &lt;div class=&quot;card-body&quot;&gt;
+                                @if (session(&apos;error&apos;))
+                                &lt;div class=&quot;alert alert-danger&quot;&gt;
+                                    {{ session(&apos;error&apos;) }}
+                                &lt;/div&gt;
+                                @endif
+                                @if (session(&apos;success&apos;))
+                                &lt;div class=&quot;alert alert-success&quot;&gt;
+                                    {{ session(&apos;success&apos;) }}
+                                &lt;/div&gt;
+                                @endif
+                                &lt;form action=&apos;{{route(&apos;Comment.store&apos;, $posts-&gt;id)}}&apos; method=&apos;POST&apos;&gt;
+                                    @csrf
+                                    &lt;textarea name=&quot;content&quot; class=&quot;form-control&quot;&gt;&lt;/textarea&gt;
+                                    &lt;input name=&quot;post_id&quot; type=&apos;hidden&apos; value={{ $posts-&gt;id }}&gt;
+                                    &lt;input name=&quot;user_id&quot; type=&apos;hidden&apos; value={{ Auth::user()-&gt;id }}&gt;
+
+                                    &lt;div class=&quot;form-group&quot;&gt;
+                                        &lt;div class=&quot;col-md-6 col-md-offset-4 mt-3&quot;&gt;
+                                            &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;
+                                                Nouveau commentaire
+                                            &lt;/button&gt;
+                                        &lt;/div&gt;
+                                    &lt;/div&gt;
+                                &lt;/form&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>
+                        Maintenant nous pouvons voir les commentaires qui ont été créer avec Faker, mais nous avons
+                        aussi la possibilité d'ajouter notre propre commentaire. Nous devons encore aller dans le
+                        contrôleur de nos commentaires pour réaliser les fonctions store, et
+                        delete. Allons-y !
+                    </p>
+                    <p>
+                        <span class="style-folder">Open -> app\Http\Controllers\CommentController.php </span>
+                    </p>
+                    <!-- accordeon methode Comments.store and Comments.destroy -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#commentsMethods" aria-expanded="false" aria-controls="commentsMethods">
+                            Code final : Comment.Store & Comment.Delete : app\Http\Controllers\CommentController.php
+                        </button>
+                    </p>
+                    <div class="collapse" id="commentsMethods">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                <!--content  -->
+                &lt;?php
+                
+                namespace App\Http\Controllers;
+                
+                use App\Comment;
+                use Illuminate\Http\Request;
+                
+                class CommentController extends Controller
+                {
+                /**
+                * Display a listing of the resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function index()
+                {
+                //
+                }
+                
+                /**
+                * Show the form for creating a new resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function create()
+                {
+                //
+                }
+                
+                /**
+                * Store a newly created resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @return \Illuminate\Http\Response
+                */
+                public function store(Request $request)
+                {
+                request()-&gt;validate([
+                &apos;content&apos; =&gt;&apos;required&apos;,
+                &apos;user_id&apos; =&gt;&apos;required&apos;,
+                &apos;post_id&apos; =&gt;&apos;required&apos;
+                ]);
+                
+                $comm = new \App\Comment;
+                $comm-&gt;content=request(&apos;content&apos;);
+                $comm-&gt;user_id=request(&apos;user_id&apos;);
+                $comm-&gt;post_id=request(&apos;post_id&apos;);
+                $comm-&gt;save();
+                return redirect()-&gt;back();
+                }
+                
+                /**
+                * Display the specified resource.
+                *
+                * @param \App\Comment $comment
+                * @return \Illuminate\Http\Response
+                */
+                public function show(Comment $comment)
+                {
+                //
+                }
+                
+                /**
+                * Show the form for editing the specified resource.
+                *
+                * @param \App\Comment $comment
+                * @return \Illuminate\Http\Response
+                */
+                public function edit(Comment $comment)
+                {
+                //
+                }
+                
+                /**
+                * Update the specified resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @param \App\Comment $comment
+                * @return \Illuminate\Http\Response
+                */
+                public function update(Request $request, Comment $comment)
+                {
+                //
+                }
+                
+                /**
+                * Remove the specified resource from storage.
+                *
+                * @param \App\Comment $comment
+                * @return \Illuminate\Http\Response
+                */
+                public function destroy($id)
+                {
+                $comment= Comment::findOrFail($id);
+                $comment-&gt;delete();
+                return back()-&gt;with(&apos;success&apos;, &quot;Your comment has been deleted successfully&quot;);
+                }
+                }
+
+            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>
+                        <a href="index3.html#section6" class="section-title">Le Profil</a>
+
+                    </p>
+                    <p>
+                        Maintenant, nous allons passé a la modification du profil. D'abord ajoutons le lien dans le menu
+                    </p>
+                    <p>
+                        <span class="style-folder">Open -> resources\views\layouts\app.blade.php</span> et indiquer
+                        celui-ci :
+                    </p>
+                    <!-- accordeon modif menu for Profile -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#addprofiledit" aria-expanded="false" aria-controls="addprofiledit">
+                            Code final : Code final: add button Profil in menu - resources\views\layouts\app.blade.php
+                        </button>
+                    </p>
+                    <div class="collapse" id="addprofiledit">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                                &lt;!doctype html&gt;
+                                &lt;html lang=&quot;{{ str_replace(&apos;_&apos;, &apos;-&apos;, app()-&gt;getLocale()) }}&quot;&gt;
+                                
+                                &lt;head&gt;
+                                &lt;meta charset=&quot;utf-8&quot;&gt;
+                                &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+                                
+                                &lt;!-- CSRF Token --&gt;
+                                &lt;meta name=&quot;csrf-token&quot; content=&quot;{{ csrf_token() }}&quot;&gt;
+                                
+                                &lt;title&gt;{{ config(&apos;app.name&apos;, &apos;Laravel&apos;) }}&lt;/title&gt;
+                                
+                                &lt;!-- Scripts --&gt;
+                                &lt;script src=&quot;{{ asset(&apos;js/app.js&apos;) }}&quot; defer&gt;&lt;/script&gt;
+                                
+                                &lt;!-- Fonts --&gt;
+                                &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//fonts.gstatic.com&quot;&gt;
+                                &lt;link href=&quot;https://fonts.googleapis.com/css?family=Nunito&quot; rel=&quot;stylesheet&quot;&gt;
+                                &lt;script src=&quot;https://kit.fontawesome.com/dde180bde7.js&quot;
+                                crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+                                
+                                &lt;!-- Styles --&gt;
+                                &lt;link href=&quot;{{ asset(&apos;css/app.css&apos;) }}&quot; rel=&quot;stylesheet&quot;&gt;
+                                &lt;/head&gt;
+                                
+                                &lt;body&gt;
+                                &lt;div id=&quot;app&quot;&gt;
+                                &lt;nav class=&quot;navbar navbar-expand-md navbar-light bg-white shadow-sm&quot;&gt;
+                                &lt;div class=&quot;container&quot;&gt;
+                                &lt;a class=&quot;navbar-brand&quot; href=&quot;{{ url(&apos;/&apos;) }}&quot;&gt;
+                                {{ config(&apos;app.name&apos;, &apos;Laravel&apos;) }}
+                                &lt;/a&gt;
+                                &lt;button class=&quot;navbar-toggler&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot;
+                                data-target=&quot;#navbarSupportedContent&quot; aria-controls=&quot;navbarSupportedContent&quot;
+                                aria-expanded=&quot;false&quot;
+                                aria-label=&quot;{{ __(&apos;Toggle navigation&apos;) }}&quot;&gt;
+                                &lt;span class=&quot;navbar-toggler-icon&quot;&gt;&lt;/span&gt;
+                                &lt;/button&gt;
+                                
+                                &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarSupportedContent&quot;&gt;
+                                &lt;!-- Left Side Of Navbar --&gt;
+                                &lt;ul class=&quot;navbar-nav mr-auto&quot;&gt;
+                                
+                                &lt;/ul&gt;
+                                
+                                &lt;!-- Right Side Of Navbar --&gt;
+                                &lt;ul class=&quot;navbar-nav ml-auto&quot;&gt;
+                                &lt;!-- Authentication Links --&gt;
+                                @guest
+                                &lt;li class=&quot;nav-item&quot;&gt;
+                                &lt;a class=&quot;nav-link&quot;
+                                href=&quot;{{ route(&apos;login&apos;) }}&quot;&gt;{{ __(&apos;Login&apos;) }}&lt;/a&gt;
+                                &lt;/li&gt;
+                                @if (Route::has(&apos;register&apos;))
+                                &lt;li class=&quot;nav-item&quot;&gt;
+                                &lt;a class=&quot;nav-link&quot;
+                                href=&quot;{{ route(&apos;register&apos;) }}&quot;&gt;{{ __(&apos;Register&apos;) }}&lt;/a&gt;
+                                &lt;/li&gt;
+                                @endif
+                                @else
+                                &lt;li class=&quot;nav-item dropdown&quot;&gt;
+                                &lt;a id=&quot;navbarDropdown&quot; class=&quot;nav-link dropdown-toggle&quot; href=&quot;#&quot;
+                                role=&quot;button&quot;
+                                data-toggle=&quot;dropdown&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot; v-pre&gt;
+                                {{ Auth::user()-&gt;name }} &lt;span class=&quot;caret&quot;&gt;&lt;/span&gt;
+                                &lt;/a&gt;
+                                
+                                &lt;div class=&quot;dropdown-menu dropdown-menu-right&quot; aria-labelledby=&quot;navbarDropdown&quot;&gt;
+                                &lt;a class=&quot;dropdown-item&quot; href=&quot;{{ route(&apos;logout&apos;) }}&quot;
+                                onclick=&quot;event.preventDefault();
+                                document.getElementById(&apos;logout-form&apos;).submit();&quot;&gt;
+                                {{ __(&apos;Logout&apos;) }}
+                                &lt;/a&gt;
+                                &lt;a class=&quot;dropdown-item&quot; href=&quot;{{ url(&apos;/profil&apos;) }}&quot;&gt;User Profil&lt;/a&gt;
+                                &lt;a class=&quot;dropdown-item&quot; href=&quot;{{ url(&apos;/changePassword&apos;) }}&quot;&gt;Change
+                                Password&lt;/a&gt;
+                                
+                                &lt;form id=&quot;logout-form&quot; action=&quot;{{ route(&apos;logout&apos;) }}&quot; method=&quot;POST&quot;
+                                style=&quot;display: none;&quot;&gt;
+                                @csrf
+                                &lt;/form&gt;
+                                &lt;/div&gt;
+                                
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                &lt;a class=&quot;nav-link&quot;
+                                href=&quot;{{ route(&apos;Post.create&apos;) }}&quot;&gt;{{ __(&apos;Create Post&apos;) }}&lt;/a&gt;
+                                &lt;/li&gt;
+                                @endguest
+                                &lt;/ul&gt;
+                                &lt;/div&gt;
+                                &lt;/div&gt;
+                                &lt;/nav&gt;
+                                
+                                &lt;main class=&quot;py-4&quot;&gt;
+                                @yield(&apos;content&apos;)
+                                &lt;/main&gt;
+                                &lt;/div&gt;
+                                &lt;/body&gt;
+                                
+                                &lt;/html&gt;
+
+                             </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Cet élément va ajouter un nouvel élément dans votre menu</p>
+                    <p>Ajoutons maintenant un nouveau controller. Sur le terminal indiquez :</p>
+                    <p class="style-console">php artisan make:controller UserProfileController</p>
+                    <p>
+                        <span class="style-folder">Open -> app\Http\Controllers\UserProfileController.php</span> et
+                        faite celui-ci :
+                    </p>
+                    <!-- Debut accordeon controller user show -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#userprofileshow" aria-expanded="false" aria-controls="userprofileshow">
+                            Modification: function show - app\Http\Controllers\UserProfileController.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="userprofileshow">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                                &lt;?php
+                                
+                                namespace App\Http\Controllers;
+                                
+                                use Illuminate\Support\Facades\Auth;
+                                
+                                
+                                class UserProfileController extends Controller
+                                {
+                                public function show()
+                                {
+                                return view(&apos;profil&apos;, [&apos;user&apos; =&gt; Auth::user()] );
+                                }
+                                }
+
+                             </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Nous allons maintenant créer une vue pour l'affichage de notre page profil</p>
+                    <p>Pour ce faire, nous allons créer un nouveau fichier qui s'appellera profil.blade.php</p>
+                    <p>
+                        <span class="style-folder">Create & Open -> resources/views/profil.blade.php</span> et indiquez
+                        ceci :
+                    </p>
+                    <!-- Debut accordeon controller user show -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#bladeuserprofil" aria-expanded="false" aria-controls="bladeuserprofil">
+                            Modification: Vue du Profil - resources/views/profil.blade.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="bladeuserprofil">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+
+                              @extends(&#x27;layouts.app&#x27;)
+                              @section(&#x27;content&#x27;)
+                              &#x3C;div class=&#x22;container&#x22;&#x3E;
+                              &#x3C;div class=&#x22;row&#x22;&#x3E;
+                              &#x3C;div class=&#x22;col-md-10 col-md-offset-1&#x22;&#x3E;
+                              &#x3C;img src=&#x22;/uploads/avatars/{{ $user-&#x3E;avatar_url }}&#x22; style=&#x22;width:150px; height:150px; float:left; border-radius:50%; margin-right:25px;&#x22;&#x3E;
+                              &#x3C;h2&#x3E;{{ $user-&#x3E;name }}&#x27;s Profile&#x3C;/h2&#x3E;
+                              &#x3C;form enctype=&#x22;multipart/form-data&#x22; action=&#x22;{{ route(&#x27;profil.update&#x27;) }}&#x22; method=&#x22;POST&#x22;&#x3E;
+                              &#x3C;label&#x3E;Update Profile Image&#x3C;/label&#x3E;
+                              &#x3C;input type=&#x22;file&#x22; name=&#x22;avatar&#x22;&#x3E;
+                              &#x3C;input type=&#x22;hidden&#x22; name=&#x22;_token&#x22; value=&#x22;{{ csrf_token() }}&#x22;&#x3E;
+                              &#x3C;input type=&#x22;submit&#x22; class=&#x22;pull-right btn btn-sm btn-primary&#x22;&#x3E;
+                              &#x3C;/form&#x3E;
+                              &#x3C;/div&#x3E;
+                              &#x3C;/div&#x3E;
+                              &#x3C;/div&#x3E;
+                              @endsection
+                      
+                      
+                      
+                            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Passons a l'installation du package intervation</p>
+                    <p>Celui-ci vous permettra de gérer vos futurs uploads</p>
+                    <p>Rendez-vous dans votre terminal et indiquez : </p>
+                    <p class="style-console">composer require intervention/image</p>
+                    <p>
+                        <span class="style-folder">Open -> config\app.php</span> et faite celui-ci :
+                    </p>
+                    <!-- Debut accordeon modification app -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#apprequire" aria-expanded="false" aria-controls="apprequire">
+                            Modification: app - config\app.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="apprequire">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+
+
+
+                            &lt;!-- Rechercher --&gt;
+                            &apos;providers&apos; =&gt; [
+                            
+                            &lt;!-- A la fin ajouter--&gt;
+                            Intervention\Image\ImageServiceProvider::class,
+                            
+                            &lt;!-- Rechercher --&gt;
+                            &apos;aliases&apos; =&gt; [
+                            &lt;!-- A la fin ajouter--&gt;
+                            &apos;Image&apos; =&gt; Intervention\Image\Facades\Image::class,
+                            
+
+
+
+                           </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Nous allons ajouter de nouvelles routes</p>
+                    <p>
+                        <span class="style-folder">Open -> routes\web.php</span> et ajouter ceci à la fin :
+                    </p>
+                    <!-- Debut accordeon modification des routes pour le profile -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#routeprofil" aria-expanded="false" aria-controls="routeprofil">
+                            Modification: app - routes\web.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="routeprofil">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                                &lt;?php
+                                use Illuminate\Support\Facades\Auth;
+                                use Illuminate\Support\Facades\Route;
+                                
+                                /*
+                                |--------------------------------------------------------------------------
+                                | Web Routes
+                                |--------------------------------------------------------------------------
+                                |
+                                | Here is where you can register web routes for your application. These
+                                | routes are loaded by the RouteServiceProvider within a group which
+                                | contains the &quot;web&quot; middleware group. Now create something great!
+                                |
+                                */
+                                
+                                Route::get(&apos;/hello&apos;,function(){
+                                return &quot;hello World&quot;;
+                                });
+                                
+                                // routes du middleware Auth
+                                Auth::routes();
+                                
+                                // routes for posts
+                                Route::resource(&apos;Post&apos;,&apos;PostController&apos;)-&gt;middleware(&apos;auth&apos;);
+                                
+                                // routes for comments
+                                Route::resource(&apos;Comment&apos;,&apos;CommentController&apos;)-&gt;middleware(&apos;auth&apos;);
+                                
+                                // notre route par defaut
+                                Route::get(&apos;/&apos;,&apos;PostController@index&apos;)-&gt;name(&apos;home&apos;);
+                                Route::get(&apos;/home&apos;,&apos;PostController@index&apos;)-&gt;name(&apos;home&apos;);
+                                
+                                Route::get(&apos;profil&apos;,
+                                &apos;UserProfileController@show&apos;)-&gt;middleware(&apos;auth&apos;)-&gt;name(&apos;profil.show&apos;);
+                                Route::post(&apos;profil&apos;,
+                                &apos;UserProfileController@update_avatar&apos;)-&gt;middleware(&apos;auth&apos;)-&gt;name(&apos;profil.update&apos;);
+                                Route::patch(&apos;profil&apos;,
+                                &apos;UserProfileController@edit&apos;)-&gt;middleware(&apos;auth&apos;)-&gt;name(&apos;profil.edit&apos;);
+                                Route::delete(&apos;profil&apos;,
+                                &apos;UserProfileController@destroy&apos;)-&gt;middleware(&apos;auth&apos;)-&gt;name(&apos;profil.destroy&apos;);
+
+                         </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Maintenant, il nous faut créer deux dossiers dans le dossier public</p>
+                    <p>
+                        <span class="style-folder">Create -> public\uploads</span> et ensuite ajouter un nouveau sous
+                        dossier
+                    </p>
+
+                    <p>
+                        <span class="style-folder">Create -> public\uploads\avatars</span>
+                    </p>
+                    <p>C'est là, que seront uploader vos avatars !</p>
+                    <p>Nous allons maintenant créer la méthode update</p>
+                    <p>
+                        <span class="style-folder">Modify -> app/Http/Controllers/UserProfileController.php</span>
+                    </p>
+                    <!-- Debut accordeon modification des routes pour le profile -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#userprofilcontroller" aria-expanded="false"
+                            aria-controls="userprofilcontroller">
+                            Modification: UserProfileController - app/Http/Controllers/UserProfileController.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="userprofilcontroller">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                            &lt;?php
+                            namespace App\Http\Controllers;
+                            
+                            use App\User;
+                            use Illuminate\Support\Facades\Auth;
+                            use Illuminate\Http\Request;
+                            
+                            
+                            
+                            class UserProfileController extends Controller
+                            {
+                            public function show()
+                            {
+                            return view(&apos;profil&apos;, [&apos;user&apos; =&gt; Auth::user()] );
+                            }
+                            
+                            public function update_avatar(Request $request)
+                            {
+                            // Logic for user upload of avatar
+                            if($request-&gt;hasFile(&apos;avatar&apos;)){
+                            $avatar = $request-&gt;file(&apos;avatar&apos;);
+                            $filename = time() . &apos;.&apos; . $avatar-&gt;getClientOriginalExtension();
+                            \Image::make($avatar)-&gt;resize(300, 300)-&gt;save( public_path(&apos;/uploads/avatars/&apos; . $filename ) );
+                            $user = Auth::user();
+                            $user-&gt;avatar_url = $filename;
+                            $user-&gt;save();
+                            }
+                            return view(&apos;profil&apos;, [&apos;user&apos; =&gt; Auth::user()] );
+                            }
+                            public function edit(Request $request)
+                            {
+                            $user = Auth::user();
+                            $this-&gt;validate($request, [
+                            &apos;name&apos; =&gt; &apos;required|max:255|unique:users,name,&apos; . $user-&gt;id,
+                            &apos;firstname&apos; =&gt; &apos;required|max:255|unique:users,name,&apos; . $user-&gt;id,
+                            &apos;email&apos; =&gt; &apos;required|email|max:255|unique:users,email,&apos; . $user-&gt;id,
+                            ]);
+                            $input = $request-&gt;only(&apos;name&apos;, &apos;firstname&apos;, &apos;email&apos;);
+                            $user-&gt;update($input);
+                            return back();
+                            }
+                            public function destroy(User $user)
+                            {
+                            $user = Auth::user();
+                            $user-&gt;delete($user-&gt;id);
+                            return redirect(&apos;/home&apos;)-&gt;with(&quot;success&quot;,&quot;Votre compte a bien &eacute;t&eacute;
+                            supprim&eacute; !&quot;);
+                            
+                            }
+                            }
+
+                            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Voilà, nous venons d'implémenter trois nouvelles fonctions, une qui va mettre à jour l'avatar,
+                        une qui édite le profil et enfin une pour la suppression du profil.
+                    </p>
+                    <p>Modifions la vue pour qu'elle puisse s'adapter au dernière modification</p>
+                    <p>
+                        <span class="style-folder">Open -> resources\views\profil.blade.php</span> selectionnez tout et
+                        remplacez par ceci :
+                    </p>
+                    <!-- Debut accordeon modification des routes pour le profile -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#bladeprofil" aria-expanded="false" aria-controls="bladeprofil">
+                            Modification: vue - resources\views\profil.blade.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="bladeprofil">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+
+
+                              @extends(&apos;layouts.app&apos;)
+                              @section(&apos;content&apos;)
+                              &lt;div class=&quot;container&quot;&gt;
+                              &lt;div class=&quot;card&quot;&gt;
+                              &lt;div class=&quot;card-header&quot;&gt;Profil de {{$user-&gt;firstname}} {{ $user-&gt;name }}&lt;/div&gt;
+                              &lt;div class=&quot;card-body&quot;&gt;
+                              &lt;div class=&quot;row&quot;&gt;
+                              &lt;div class=&quot;col-md-2 col-md-offset-1 text-center&quot;&gt;
+                              &lt;img src=&quot;/uploads/avatars/{{ $user-&gt;avatar_url }}&quot;
+                              style=&quot;width:150px; height:150px; float:left; border-radius:50%; margin-right:25px;&quot;&gt;
+                              &lt;button type=&quot;button&quot; class=&quot;btn btn-primary mt-3&quot; data-toggle=&quot;modal&quot; data-target=&quot;#modal-avatar&quot;&gt;
+                              &lt;i class=&quot;far fa-image&quot;&gt;&lt;/i&gt;
+                              &lt;/button&gt;
+
+                              &lt;!-- Modal avatar --&gt;
+                              &lt;div class=&quot;modal fade&quot; id=&quot;modal-avatar&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot;
+                              aria-labelledby=&quot;exampleModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+                              &lt;div class=&quot;modal-dialog&quot; role=&quot;document&quot;&gt;
+                              &lt;div class=&quot;modal-content&quot;&gt;
+                              &lt;div class=&quot;modal-header&quot;&gt;
+                              &lt;h5 class=&quot;modal-title&quot; id=&quot;exampleModalLabel&quot;&gt;Modification de votre avatar&lt;/h5&gt;
+                              &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+                              &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+                              &lt;/button&gt;
+                              &lt;/div&gt;
+                              &lt;div class=&quot;modal-body&quot;&gt;
+                              &lt;form enctype=&quot;multipart/form-data&quot; action=&quot;{{ route(&apos;profil.update&apos;) }}&quot;
+                              method=&quot;POST&quot;&gt;
+                              &lt;input type=&quot;file&quot; name=&quot;avatar&quot;&gt;
+                              &lt;input type=&quot;hidden&quot; name=&quot;_token&quot; value=&quot;{{ csrf_token() }}&quot;&gt;
+
+                              &lt;/div&gt;
+                              &lt;div class=&quot;modal-footer&quot;&gt;
+                              &lt;input type=&quot;submit&quot; class=&quot;pull-right btn btn-sm btn-primary&quot;&gt;
+                              &lt;/form&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;!-- Modal Avatar end --&gt;
+
+                              &lt;/div&gt;
+                              &lt;div class=&quot;col-md-3 col-md-offset-1 mt-3&quot;&gt;
+                              &lt;p&gt;&lt;strong&gt;Nom :&lt;/strong&gt; {{ $user-&gt;firstname}}&lt;/p&gt;
+                              &lt;p&gt;&lt;strong&gt;Pr&eacute;nom : &lt;/strong&gt; {{$user-&gt;name}}&lt;/p&gt;
+                              &lt;p&gt;&lt;strong&gt;E-mail : &lt;/strong&gt; {{$user-&gt;email}}&lt;/p&gt;
+                              &lt;div class=&quot;d-flex justify-content-end&quot;&gt;
+                              &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-toggle=&quot;modal&quot; data-target=&quot;#modal-profil&quot;&gt;
+                              &lt;i class=&quot;fas fa-pencil-alt&quot;&gt;&lt;/i&gt;
+                              &lt;/button&gt;
+                              &lt;/div&gt;
+                              &lt;!-- Modal profil --&gt;
+                              &lt;div class=&quot;modal fade&quot; id=&quot;modal-profil&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot;
+                              aria-labelledby=&quot;exampleModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+                              &lt;div class=&quot;modal-dialog&quot; role=&quot;document&quot;&gt;
+                              &lt;div class=&quot;modal-content&quot;&gt;
+                              &lt;div class=&quot;modal-header&quot;&gt;
+                              &lt;h5 class=&quot;modal-title&quot; id=&quot;exampleModalLabel&quot;&gt;Modification de votre Profil&lt;/h5&gt;
+                              &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+                              &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+                              &lt;/button&gt;
+                              &lt;/div&gt;
+                              &lt;div class=&quot;modal-body&quot;&gt;
+                              &lt;form enctype=&quot;multipart/form-data&quot; action=&quot;{{route(&apos;profil.edit&apos;, $user)}}&quot;
+                              method=&quot;POST&quot;&gt;
+                              &lt;div class=&quot;form-group hidden&quot;&gt;
+                              &lt;input type=&quot;hidden&quot; name=&quot;_token&quot; value=&quot;{{ csrf_token() }}&quot;&gt;
+                              &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PATCH&quot;&gt;
+                              &lt;/div&gt;
+                              &lt;!-- Name --&gt;
+                              &lt;div class=&quot;form-group {{ $errors-&gt;has(&apos;name&apos;) ? &apos; has-error&apos; : &apos;&apos; }}&quot;&gt;
+                              &lt;label for=&quot;name&quot; class=&quot;control-label&quot;&gt;&lt;b&gt;Pr&eacute;nom:&lt;/b&gt;&lt;/label&gt;
+                              &lt;input type=&quot;text&quot; name=&quot;name&quot; placeholder=&quot;Please enter your name here&quot;
+                              class=&quot;form-control&quot; value=&quot;{{ $user-&gt;name }}&quot; required /&gt;
+
+                              &lt;?php if ($errors-&gt;has(&apos;name&apos;)) :?&gt;
+                              &lt;span class=&quot;help-block&quot;&gt;
+                              &lt;strong&gt;{{$errors-&gt;first(&apos;name&apos;)}}&lt;/strong&gt;
+                              &lt;/span&gt;
+                              &lt;?php endif;?&gt;
+
+                              &lt;/div&gt;
+                              &lt;!-- Firstname --&gt;
+                              &lt;div class=&quot;form-group {{ $errors-&gt;has(&apos;firstname&apos;) ? &apos; has-error&apos; : &apos;&apos; }}&quot;&gt;
+                              &lt;label for=&quot;firstname&quot; class=&quot;control-label&quot;&gt;&lt;b&gt;Nom:&lt;/b&gt;&lt;/label&gt;
+                              &lt;input type=&quot;text&quot; name=&quot;firstname&quot;
+                              placeholder=&quot;Please enter your firstname here&quot; class=&quot;form-control&quot;
+                              value=&quot;{{ $user-&gt;firstname }}&quot; required /&gt;
+
+                              &lt;?php if ($errors-&gt;has(&apos;firstanme&apos;)) :?&gt;
+                              &lt;span class=&quot;help-block&quot;&gt;
+                              &lt;strong&gt;{{$errors-&gt;first(&apos;firstname&apos;)}}&lt;/strong&gt;
+                              &lt;/span&gt;
+                              &lt;?php endif;?&gt;
+
+                              &lt;/div&gt;
+                              &lt;!-- Email--&gt;
+                              &lt;div class=&quot;form-group {{ $errors-&gt;has(&apos;email&apos;) ? &apos; has-error&apos; : &apos;&apos; }}&quot;&gt;
+                              &lt;label for=&quot;email&quot; class=&quot;control-label&quot;&gt;&lt;b&gt;Email:&lt;/b&gt;&lt;/label&gt;
+                              &lt;input type=&quot;text&quot; name=&quot;email&quot; placeholder=&quot;Please enter your email here&quot;
+                              class=&quot;form-control&quot; value=&quot;{{ $user-&gt;email }}&quot; required /&gt;
+
+                              &lt;?php if ($errors-&gt;has(&apos;email&apos;)) :?&gt;
+                              &lt;span class=&quot;help-block&quot;&gt;
+                              &lt;strong&gt;{{$errors-&gt;first(&apos;email&apos;)}}&lt;/strong&gt;
+                              &lt;/span&gt;
+                              &lt;?php endif;?&gt;
+
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;div class=&quot;modal-footer&quot;&gt;
+                              &lt;input type=&quot;submit&quot; class=&quot;pull-right btn btn-sm btn-primary&quot;&gt;
+                              &lt;/form&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;!-- Fin Modal profil --&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;div class=&quot;d-flex justify-content-end&quot;&gt;
+                              &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-toggle=&quot;modal&quot; data-target=&quot;#modal-delete-profil&quot;&gt;
+                              Supprimer mon profil
+                              &lt;/button&gt;
+                              &lt;/div&gt;
+
+                              &lt;div class=&quot;modal fade&quot; id=&quot;modal-delete-profil&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot;
+                              aria-labelledby=&quot;exampleModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+                              &lt;div class=&quot;modal-dialog&quot; role=&quot;document&quot;&gt;
+                              &lt;div class=&quot;modal-content&quot;&gt;
+                              &lt;div class=&quot;modal-header&quot;&gt;
+                              &lt;h5 class=&quot;modal-title&quot; id=&quot;exampleModalLabel&quot;&gt;Suppression de votre compte&lt;/h5&gt;
+                              &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+                              &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+                              &lt;/button&gt;
+                              &lt;/div&gt;
+                              &lt;div class=&quot;modal-body&quot;&gt;
+                              &lt;p&gt;Vous &ecirc;tes sur le point de supprimer votre compte&lt;/p&gt;
+                              &lt;p&gt;Etes-vous certain de vouloir perdre toutes vos donn&eacute;es ?&lt;/p&gt;
+
+                              &lt;form method=&quot;post&quot; class=&quot;delete_form&quot; action=&quot;{{route(&apos;profil.destroy&apos;)}}&quot;&gt;
+                              &lt;div class=&quot;form-check&quot;&gt;
+                              &lt;input type=&quot;checkbox&quot; id=&quot;myCheck&quot; onclick=&quot;checkfunction()&quot; class=&quot;form-check-input&quot; id=&quot;exampleCheck1&quot;&gt;
+                              &lt;label class=&quot;form-check-label&quot; for=&quot;exampleCheck1&quot; name=&quot;delete-account&quot;&gt;je
+                              confirme la suppression de mon compte&lt;/label&gt;
+                              &lt;/div&gt;
+                              @method(&apos;DELETE&apos;)
+                              @csrf
+                              &lt;/div&gt;
+                              &lt;div class=&quot;modal-footer&quot;&gt;
+
+                              &lt;input id =&quot;deleteAccount&quot; type=&quot;submit&quot; class=&quot;pull-right btn btn-sm btn-primary&quot; disabled&gt;
+                              &lt;/form&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;script&gt;
+                              function checkfunction() {
+                              // Get the checkbox
+                              var checkBox = document.getElementById(&quot;myCheck&quot;);
+                              // Get the output text
+                              var check = document.getElementById(&quot;deleteAccount&quot;);
+
+                              // If the checkbox is checked, display the output text
+                              if (checkBox.checked == true){
+                              check.disabled = false;
+                              } else {
+                              check.disabled = true;
+                              }
+                              }
+                              &lt;/script&gt;
+                              @endsection
+
+  
+                            
+
+
+                       </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Un peu long hein ? :D</p>
+                    <p>Passons a la dernière partie, la modification du mot de passe</p>
+                    <p>Nous allons créer a nouveau un nouvel controller</p><span class="style-console">php artisan
+                        make:controller PasswordController</span>
+                    <p>
+                        <span class="style-folder">Create -> app/Http/Controllers/PasswordController.php</span> et a
+                        coller ceci :
+                    </p>
+                    <!-- Debut changepassword controller -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#passwordcontroller" aria-expanded="false" aria-controls="passwordcontroller">
+                            Modification: PasswordController - app/Http/Controllers/PasswordController.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="passwordcontroller">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+                            &lt;?php
+                            
+                            namespace App\Http\Controllers;
+                            
+                            use Illuminate\Http\Request;
+                            use Illuminate\Support\Facades\Hash;
+                            use Illuminate\Support\Facades\Auth;
+                            
+                            
+                            class PasswordController extends Controller
+                            {
+                            /**
+                            * Create a new controller instance.
+                            *
+                            * @return void
+                            */
+                            public function __construct()
+                            {
+                            $this-&gt;middleware(&apos;auth&apos;);
+                            }
+                            public function showChangePasswordForm()
+                            {
+                            return view(&apos;changePassword&apos;);
+                            
+                            }
+                            public function changePassword(Request $request){
+                            
+                            if (!(Hash::check($request-&gt;get(&apos;current-password&apos;), Auth::user()-&gt;password))) {
+                            // The passwords matches
+                            return redirect()-&gt;back()-&gt;with(&quot;error&quot;,&quot;Your current password does not matches with the password
+                            you provided. Please try again.&quot;);
+                            }
+                            
+                            if(strcmp($request-&gt;get(&apos;current-password&apos;), $request-&gt;get(&apos;new-password&apos;)) == 0){
+                            //Current password and new password are same
+                            return redirect()-&gt;back()-&gt;with(&quot;error&quot;,&quot;New Password cannot be same as your current password.
+                            Please choose a different password.&quot;);
+                            }
+                            $validatedData = $request-&gt;validate([
+                            &apos;current-password&apos; =&gt; &apos;required&apos;,
+                            &apos;new-password&apos; =&gt; &apos;required|string|min:6|confirmed&apos;,
+                            ]);
+                            //Change Password
+                            $user = Auth::user();
+                            $user-&gt;password = bcrypt($request-&gt;get(&apos;new-password&apos;));
+                            $user-&gt;save();
+                            
+                            return redirect()-&gt;back()-&gt;with(&quot;success&quot;,&quot;Votre mot de passe a bien &eacute;t&eacute;
+                            chang&eacute; !&quot;);                            
+                            
+                              }
+                            }
+
+                            </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>On viens de créer notre nouveau controller qui prendra en charge la vue du changement de mot de
+                        passe</p>
+                    <p>
+                        <span class="style-folder">Create & Open -> resources/views/changePassword.blade.php</span> et a
+                        coller
+                        ceci :
+                    </p>
+                    <!-- Debut changepassword blade -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#passwordblade" aria-expanded="false" aria-controls="passwordblade">
+                            Modification: changePassword - resources/views/changePassword.blade.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="passwordblade">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+
+
+
+                              @extends(&apos;layouts.app&apos;)
+
+                              @section(&apos;content&apos;)
+                              &lt;div class=&quot;container&quot;&gt;
+                              &lt;div class=&quot;row&quot;&gt;
+                              &lt;div class=&quot;col-md-8 col-md-offset-2&quot;&gt;
+                              &lt;div class=&quot;panel panel-default&quot;&gt;
+                              &lt;div class=&quot;panel-heading&quot;&gt;Modification du mot de passe&lt;/div&gt;
+                              
+                              &lt;div class=&quot;panel-body&quot;&gt;
+                              @if (session(&apos;error&apos;))
+                              &lt;div class=&quot;alert alert-danger&quot;&gt;
+                              {{ session(&apos;error&apos;) }}
+                              &lt;/div&gt;
+                              @endif
+                              @if (session(&apos;success&apos;))
+                              &lt;div class=&quot;alert alert-success&quot;&gt;
+                              {{ session(&apos;success&apos;) }}
+                              &lt;/div&gt;
+                              @endif
+                              &lt;form class=&quot;form-horizontal&quot; method=&quot;POST&quot; action=&quot;{{ route(&apos;changePassword&apos;) }}&quot;&gt;
+                              {{ csrf_field() }}
+                              
+                              &lt;div class=&quot;form-group{{ $errors-&gt;has(&apos;current-password&apos;) ? &apos; has-error&apos; : &apos;&apos; }}&quot;&gt;
+                              &lt;label for=&quot;new-password&quot; class=&quot;col-md-4 control-label&quot;&gt;Mot de passe actuel&lt;/label&gt;
+                              
+                              &lt;div class=&quot;col-md-6&quot;&gt;
+                              &lt;input id=&quot;current-password&quot; type=&quot;password&quot; class=&quot;form-control&quot; name=&quot;current-password&quot; required&gt;
+                              
+                              @if ($errors-&gt;has(&apos;current-password&apos;))
+                              &lt;span class=&quot;help-block&quot;&gt;
+                              &lt;strong&gt;{{ $errors-&gt;first(&apos;current-password&apos;) }}&lt;/strong&gt;
+                              &lt;/span&gt;
+                              @endif
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              
+                              &lt;div class=&quot;form-group{{ $errors-&gt;has(&apos;new-password&apos;) ? &apos; has-error&apos; : &apos;&apos; }}&quot;&gt;
+                              &lt;label for=&quot;new-password&quot; class=&quot;col-md-4 control-label&quot;&gt;Nouveau Mot de passe&lt;/label&gt;
+                              
+                              &lt;div class=&quot;col-md-6&quot;&gt;
+                              &lt;input id=&quot;new-password&quot; type=&quot;password&quot; class=&quot;form-control&quot; name=&quot;new-password&quot; required&gt;
+                              
+                              @if ($errors-&gt;has(&apos;new-password&apos;))
+                              &lt;span class=&quot;help-block&quot;&gt;
+                              &lt;strong&gt;{{ $errors-&gt;first(&apos;new-password&apos;) }}&lt;/strong&gt;
+                              &lt;/span&gt;
+                              @endif
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              
+                              &lt;div class=&quot;form-group&quot;&gt;
+                              &lt;label for=&quot;new-password-confirm&quot; class=&quot;col-md-4 control-label&quot;&gt;Confirmation du nouveau mot de passe&lt;/label&gt;
+                              
+                              &lt;div class=&quot;col-md-6&quot;&gt;
+                              &lt;input id=&quot;new-password-confirm&quot; type=&quot;password&quot; class=&quot;form-control&quot; name=&quot;new-password_confirmation&quot; required&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              
+                              &lt;div class=&quot;form-group&quot;&gt;
+                              &lt;div class=&quot;col-md-6 col-md-offset-4&quot;&gt;
+                              &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;
+                              Changer le mot de passe
+                              &lt;/button&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/form&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              &lt;/div&gt;
+                              @endsection
+                              
+
+
+                          
+            
+            
+                                     </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Voilà, pour la vue c'est ok ! Maintenant passons au dernier élément l'activation de la route</p>
+                    <p>
+                        <span class="style-folder">Modify -> routes\web.php</span> et ajouter ceci a la fin
+                    </p>
+                    <!-- Debut changepassword route -->
+                    <p>
+                        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                            data-target="#changepasswordblade" aria-expanded="false"
+                            aria-controls="changepasswordblade">
+                            Modification: Route - routes\web.php
+                        </button>
+                    </p>
+
+                    <div class="collapse" id="changepasswordblade">
+                        <div class="card card-body">
+                            <pre class="pre-line style-code">
+
+
+
+                            Route::post(&apos;/changePassword&apos;,&apos;PasswordController@changePassword&apos;)-&gt;name(&apos;changePassword&apos;);
+                            Route::get(&apos;/changePassword&apos;,&apos;PasswordController@showChangePasswordForm&apos;);
+
+
+                        
+          
+          
+                                   </pre>
+                        </div>
+                    </div>
+                    <!-- --------------------fin accordeon  ------------------------- -->
+                    <p>Et c'est fini !!!!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

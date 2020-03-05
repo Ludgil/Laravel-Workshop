@@ -1,0 +1,1661 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Workshop-Laravel</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>Laravel Workshop Project</h1>
+      <p class="contribution">Bacq E. - Gilotaux L. & Markus E.</p>
+    </header>
+    <div class="main-page">
+      <b style="color:#F34E39"><u>2ème Partie</u></b>
+      <!--  table des matières  -->
+      <div class="container the-index mt-3 ml-5">
+        Table des matières:
+        <ol class="ol-first">
+          <li>
+            <a href="index.html#section1" class="color-laravel">Création de notre projet</a>
+            <ol class="ol-sec">
+              <li><a href="index.html#section1a">configuration de notre projet</a></li>
+            </ol>
+          </li>
+          <li>
+            <a href="index.html#section2" class="color-laravel">La base (Eloquent & Migration)</a>
+            <ol class="ol-sec">
+              <li><a href="index.html#section2a">Les Models</a></li>
+              <li><a href="index.html#section3a">Les Factory</a></li>
+              <li><a href="index.html#section4a">Les Seeder</a></li>
+            </ol>
+          </li>
+          <li>
+            <a href="index2.html#section3" class="color-laravel">Les postes (Routes, Controller & Vue)</a>
+          </li>
+          <li>
+            <a href="index3.html#section4" class="color-laravel">Quelques ajutements</a>
+          </li>
+          <li>
+            <a href="index3.html#section5" class="color-laravel">Les Commentaires</a>
+          </li>
+          <li>
+            <a href="index3.html#section6" class="color-laravel">Le Profil</a>
+          </li>
+        </ol>
+      </div>
+      <!-- ---------------------------------- -->
+      <div class="row">
+        <div class="container">
+          <p>
+            Pour commencer ce chapitre retournons sur notre homepage de laravel. Nous voyons maintenant dans le coins
+            supérieur droit, la possibilité de se loger ou s'enregistrer. En appuyant sur l'un ou l'autre nous obtenons
+            un formulaire du type bootstrap. Nous pouvons déjà remarquer qu'il manque certains champs que nous
+            souhaitions, comme l'avatar ou le prénom. Si on essayait de s'enregistrer nous avons que des erreurs. </p>
+          <p>
+            Mais commençons par le début et voyons comment guider nos utilisateurs jusqu'à nos formulaires en plongeant
+            dans les routes. Ouvrez le fichier suivant : <span class="style-folder">open -> routes\web.php</span>
+          </p>
+          <p>
+            Nous pouvons voir que nous avons une première route qui nous envoie vers une vue 'welcome'. Et si vous allez
+            voir dans le fichier <span class="style-folder">Open-> resources\views\welcome.blade.php</span>. Vous
+            comprendrez que c'est la page qui nous affiche notre homepage laravel. Mais c'est pas ce que nous voulons
+            nous allons donc la faire 'router' vers la liste des postes.
+          </p>
+          <p>
+            En dessous nous retrouvons la déclaration des routes pour l'authentification, plus sympa niveau de la
+            syntaxe. Nous allons en dessous déclarer les routes pour nos postes et nos commentaires plus ou moins de la
+            même manière.
+          </p>
+          <p class="text-dark bg-warning">DIA 33->42</p>
+          <!-- accordeon modif ROUTE -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#nosroute"
+              aria-expanded="false" aria-controls="nosroute">
+              Code final : routes\web.php
+            </button>
+          </p>
+          <div class="collapse" id="nosroute">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                  <!--content  -->
+                  &lt;?php
+                  use Illuminate\Support\Facades\Auth;
+                  use Illuminate\Support\Facades\Route;
+                  /*
+                        |--------------------------------------------------------------------------
+                        | Web Routes
+                        |--------------------------------------------------------------------------
+                        |
+                        | Here is where you can register web routes for your application. These
+                        | routes are loaded by the RouteServiceProvider within a group which
+                        | contains the &quot;web&quot; middleware group. Now create something great!
+                        |
+                        */
+
+                        Route::get(&apos;/hello&apos;,function(){
+                        return &quot;hello World&quot;;
+                    });
+
+                    // routes du middleware Auth
+                    Auth::routes();
+
+                    // routes for posts
+                    Route::resource(&apos;Post&apos;,&apos;PostController&apos;)-&gt;middleware(&apos;auth&apos;);
+
+                    // routes for comments
+                    Route::resource(&apos;Comment&apos;,&apos;CommentController&apos;)-&gt;middleware(&apos;auth&apos;);
+
+                    // notre route par defaut
+                    Route::get(&apos;/&apos;,&apos;PostController@index&apos;)-&gt;name(&apos;home&apos;);
+                    Route::get(&apos;/home&apos;,&apos;PostController@index&apos;)-&gt;name(&apos;home&apos;);
+              </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Si vous faite dans votre console un <span class="style-console">php artisan route:list</span> vous pourrez
+            constatez que nous retrouvons toute nos routes et nommez aussi.
+          </p>
+          <p>
+            Vous avez vu que dans notre routage nous appelons un 'controlleur'. c'est lui qui selon la route choisie va
+            afficher une page ou réaliser une action. C'est ce contrôle que nous allons effectuer maintenant.
+          </p>
+          <p>
+            <span class="style-folder">Open -> app\Http\Controllers\PostController.php</span>
+          </p>
+          <p>
+            Lorsque nous avons créé les Model, les Controller ont été crées automatiquement et on peut voir que laravel
+            est assez verbeux dans ses fichiers. Nous voyons toutes les fonctions que nous pouvons ou devons créer.
+            l'index est le page de base, ici notre homepage. La fonction 'Create' doit juste afficher un formulaire et
+            nous faisons la vérification et l'enregistrement avec le store. La fonction 'edit' attend une variable, qui
+            sera le numéro du post à éditer dans un formulaire et sera à son tour envoyer avec son identifiant vers la
+            fonction update qui se chargera de mettre a jour la table. La dernière fonction est la fonction 'delete', je
+            pense qu'elle peut se passer de commentaire.
+          </p>
+          <p>
+            Créons notre premier contrôle, l'index en entrant ceci dans la fonction index du PostController.
+          </p>
+          <!-- accordeon modif Post controller -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+              data-target="#indexPostControl" aria-expanded="false" aria-controls="indexPostControl">
+              Code final : function index : app\Http\Controllers\PostController.php
+            </button>
+          </p>
+          <div class="collapse" id="indexPostControl">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                &lt;?php
+                
+                namespace App\Http\Controllers;
+                use Illuminate\Http\Request;
+                
+                
+                use Auth;
+                use App\Post;
+                use App\User;
+                use App\Comment;
+                
+                class PostController extends Controller
+                {
+                /**
+                * Display a listing of the resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function index()
+                {
+                // nous mettons dans $post les poste sous forme de tableau
+                // le tout trier selon la colonne title, et nous souhaitons une pagination de 4/pages
+                $post = Post::orderBy(&apos;title&apos;, &apos;asc&apos;)-&gt;paginate(4);
+                // nous demandons de retourner la vue de notre route et passons le tableau &agrave; la vue
+                return view(&apos;Post.index&apos;)-&gt;with(&apos;posts&apos;,$post);
+                }
+                
+                /**
+                * Show the form for creating a new resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function create()
+                {
+                //
+                }
+                
+                /**
+                * Store a newly created resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @return \Illuminate\Http\Response
+                */
+                public function store(Request $request)
+                {
+                //
+                }
+                
+                /**
+                * Display the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function show(Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Show the form for editing the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function edit(Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Update the specified resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function update(Request $request, Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Remove the specified resource from storage.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function destroy(Post $post)
+                {
+                //
+                }
+                }
+
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Ici nous venons simplement de dire à Laravel de retourner la vue index qui se trouve dans le dossier Post.
+            Nous devons donc créer ce dossier et ce fichier. <span class="style-folder">Create & Open ->
+              resources\views\Post\index.blade.php</span> ouvrez-le et copier le code suivant
+            dedans.
+          </p>
+          <p>
+            <!-- accordeon modif Post.index  -->
+            <p>
+              <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postIndex"
+                aria-expanded="false" aria-controls="postIndex">
+                Code final : resources\views\Post\index.blade.php
+              </button>
+            </p>
+            <div class="collapse" id="postIndex">
+              <div class="card card-body">
+                <pre class="pre-line style-code">
+                <!--content  -->
+              @extends(&apos;layouts.app&apos;)
+              
+              @section(&apos;content&apos;)
+              
+              @if (session(&apos;error&apos;))
+              &lt;div class=&quot;alert alert-danger&quot;&gt;
+              {{ session(&apos;error&apos;) }}
+              &lt;/div&gt;
+              @endif
+              @if (session(&apos;success&apos;))
+              &lt;div class=&quot;alert alert-success&quot;&gt;
+              {{ session(&apos;success&apos;) }}
+              &lt;/div&gt;
+              @endif
+              @if (session(&apos;status&apos;))
+              &lt;div class=&quot;alert alert-success&quot; role=&quot;alert&quot;&gt;
+              {{ session(&apos;status&apos;) }}
+              &lt;/div&gt;
+              @endif
+              &lt;div class=&quot;container&quot;&gt;
+              &lt;div class=&quot;row justify-content-center&quot;&gt;
+              &lt;div class=&quot;col-md-10&quot;&gt;
+              
+              @foreach ($posts as $post)
+              &lt;div class=&quot;card mt-4&quot;&gt;
+              &lt;div class=&quot;card-header&quot;&gt;
+              &lt;div class=&quot;row&quot;&gt;
+              
+              &lt;h4 class=&quot;col-8&quot;&gt;{{ $post-&gt;title}}&lt;/h4&gt;
+              &lt;div class=&quot;col-4 text-right&quot;&gt;cr&eacute;&eacute; le
+              {{ date(&quot;d-m-Y&quot;, strtotime($post-&gt;created_at)) }}&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div&gt;par {{ $post-&gt;User-&gt;name}}&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;card-body&quot;&gt;
+              &lt;div&gt;{!! substr($post-&gt;content,0,400) !!}&lt;/div&gt;
+              &lt;/div&gt;
+              
+              &lt;div class=&quot;card-footer&quot;&gt;
+              &lt;div class=&quot;row&quot;&gt;
+              &lt;div class=&quot;col-9&quot;&gt;
+              &lt;div class=&quot;mt-1&quot; style=&quot;float:left;&quot;&gt;
+              &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; value=&quot;Read More&quot;&gt;
+              &lt;a style=&quot;color:white;&quot; href=&quot;{{ URL::to(&apos;Post/&apos; . $post-&gt;id) }}&quot;&gt;Read
+              More&lt;/a&gt;
+              &lt;/button&gt;
+              &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;col-3 d-flex justify-content-end&quot;&gt;
+              @guest
+              @else
+              @endguest
+              &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;/div&gt;
+              
+              &lt;/div&gt;
+              @endforeach
+              
+              &lt;/div&gt;
+              &lt;/div&gt;
+              {{ $posts-&gt;links() }}
+              &lt;/div&gt;
+              @endsection
+
+            </pre>
+              </div>
+            </div>
+            <!-- --------------------fin accordeon  ------------------------- -->
+          </p>
+          <p>
+            Si vous rafraîchissez votre code vous verrez que nous avons la possibilité de nous loger et enregistrer.
+            mais comment est-ce possible. Et bien la première ligne nous permet de dire que notre page est une extension
+            du fichier app qui se trouve dans le dossier layout du dossier 'ressources/views'. Le corps de notre page se
+            trouvera dans la section 'content'. Et nous affichons bien nos postes déjà créer avec faker.
+          </p>
+          <p>
+            Maintenant nous souhaitons pouvoir modifier nos postes, ce n'est possible que si on est loger. Allons sur
+            register et voyons ce que l'on a...
+          </p>
+          <p>
+            Ceci est le formulaire de base, mais rappelez-vous, nous avons ajouter un lastname et un avatar. nous devons
+            donc changer la manière de travailler de notre middleware 'Auth'. Allons modifier tout cela. pour commencer
+            allons changer notre formulaire d'enregistrement. <span class="style-folder">Open ->
+              resources\views\auth\register.blade.php</span> et copier ce code.
+          </p>
+          <!-- accordeon modif Post factory -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#viewregister"
+              aria-expanded="false" aria-controls="viewregister">
+              Code final : resources\views\auth\register.blade.php
+            </button>
+          </p>
+          <div class="collapse" id="viewregister">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                @extends(&#x27;layouts.app&#x27;)
+                @section(&#x27;content&#x27;)
+                &#x3C;div class=&#x22;container&#x22;&#x3E;
+                    &#x3C;div class=&#x22;row justify-content-center&#x22;&#x3E;
+                        &#x3C;div class=&#x22;col-md-8&#x22;&#x3E;
+                            &#x3C;div class=&#x22;card&#x22;&#x3E;
+                                &#x3C;div class=&#x22;card-header&#x22;&#x3E;{{ __(&#x27;Register&#x27;) }}&#x3C;/div&#x3E;
+
+                                &#x3C;div class=&#x22;card-body&#x22;&#x3E;
+                                    &#x3C;form method=&#x22;POST&#x22; action=&#x22;{{ route(&#x27;register&#x27;) }}&#x22;&#x3E;
+                                        @csrf
+
+                                        &#x3C;div class=&#x22;form-group row&#x22;&#x3E;
+                                            &#x3C;label for=&#x22;name&#x22; class=&#x22;col-md-4 col-form-label text-md-right&#x22;&#x3E;{{ __(&#x27;Name&#x27;) }}&#x3C;/label&#x3E;
+
+                                            &#x3C;div class=&#x22;col-md-6&#x22;&#x3E;
+                                                &#x3C;input id=&#x22;name&#x22; type=&#x22;text&#x22; class=&#x22;form-control @error(&#x27;name&#x27;) is-invalid @enderror&#x22;
+                                                    name=&#x22;name&#x22; value=&#x22;{{ old(&#x27;name&#x27;) }}&#x22; required autocomplete=&#x22;name&#x22; autofocus&#x3E;
+
+                                                @error(&#x27;name&#x27;)
+                                                &#x3C;span class=&#x22;invalid-feedback&#x22; role=&#x22;alert&#x22;&#x3E;
+                                                    &#x3C;strong&#x3E;{{ $message }}&#x3C;/strong&#x3E;
+                                                &#x3C;/span&#x3E;
+                                                @enderror
+                                            &#x3C;/div&#x3E;
+                                        &#x3C;/div&#x3E;
+
+                                        &#x3C;div class=&#x22;form-group row&#x22;&#x3E;
+                                            &#x3C;label for=&#x22;firstname&#x22;
+                                                class=&#x22;col-md-4 col-form-label text-md-right&#x22;&#x3E;{{ __(&#x27;FirstName&#x27;) }}&#x3C;/label&#x3E;
+
+                                            &#x3C;div class=&#x22;col-md-6&#x22;&#x3E;
+                                                &#x3C;input id=&#x22;firstname&#x22; type=&#x22;text&#x22;
+                                                    class=&#x22;form-control @error(&#x27;firstname&#x27;) is-invalid @enderror&#x22; name=&#x22;firstname&#x22;
+                                                    value=&#x22;{{ old(&#x27;firstname&#x27;) }}&#x22; required autocomplete=&#x22;firstname&#x22; autofocus&#x3E;
+
+                                                @error(&#x27;firstname&#x27;)
+                                                &#x3C;span class=&#x22;invalid-feedback&#x22; role=&#x22;alert&#x22;&#x3E;
+                                                    &#x3C;strong&#x3E;{{ $message }}&#x3C;/strong&#x3E;
+                                                &#x3C;/span&#x3E;
+                                                @enderror
+                                            &#x3C;/div&#x3E;
+                                        &#x3C;/div&#x3E;
+
+                                        &#x3C;div class=&#x22;form-group row&#x22;&#x3E;
+                                            &#x3C;label for=&#x22;email&#x22;
+                                                class=&#x22;col-md-4 col-form-label text-md-right&#x22;&#x3E;{{ __(&#x27;E-Mail Address&#x27;) }}&#x3C;/label&#x3E;
+
+                                            &#x3C;div class=&#x22;col-md-6&#x22;&#x3E;
+                                                &#x3C;input id=&#x22;email&#x22; type=&#x22;email&#x22; class=&#x22;form-control @error(&#x27;email&#x27;) is-invalid @enderror&#x22;
+                                                    name=&#x22;email&#x22; value=&#x22;{{ old(&#x27;email&#x27;) }}&#x22; required autocomplete=&#x22;email&#x22;&#x3E;
+
+                                                @error(&#x27;email&#x27;)
+                                                &#x3C;span class=&#x22;invalid-feedback&#x22; role=&#x22;alert&#x22;&#x3E;
+                                                    &#x3C;strong&#x3E;{{ $message }}&#x3C;/strong&#x3E;
+                                                &#x3C;/span&#x3E;
+                                                @enderror
+                                            &#x3C;/div&#x3E;
+                                        &#x3C;/div&#x3E;
+
+                                        &#x3C;div class=&#x22;form-group row&#x22;&#x3E;
+                                            &#x3C;label for=&#x22;password&#x22;
+                                                class=&#x22;col-md-4 col-form-label text-md-right&#x22;&#x3E;{{ __(&#x27;Password&#x27;) }}&#x3C;/label&#x3E;
+
+                                            &#x3C;div class=&#x22;col-md-6&#x22;&#x3E;
+                                                &#x3C;input id=&#x22;password&#x22; type=&#x22;password&#x22;
+                                                    class=&#x22;form-control @error(&#x27;password&#x27;) is-invalid @enderror&#x22; name=&#x22;password&#x22;
+                                                    required autocomplete=&#x22;new-password&#x22;&#x3E;
+
+                                                @error(&#x27;password&#x27;)
+                                                &#x3C;span class=&#x22;invalid-feedback&#x22; role=&#x22;alert&#x22;&#x3E;
+                                                    &#x3C;strong&#x3E;{{ $message }}&#x3C;/strong&#x3E;
+                                                &#x3C;/span&#x3E;
+                                                @enderror
+                                            &#x3C;/div&#x3E;
+                                        &#x3C;/div&#x3E;
+
+                                        &#x3C;div class=&#x22;form-group row&#x22;&#x3E;
+                                            &#x3C;label for=&#x22;password-confirm&#x22;
+                                                class=&#x22;col-md-4 col-form-label text-md-right&#x22;&#x3E;{{ __(&#x27;Confirm Password&#x27;) }}&#x3C;/label&#x3E;
+
+                                            &#x3C;div class=&#x22;col-md-6&#x22;&#x3E;
+                                                &#x3C;input id=&#x22;password-confirm&#x22; type=&#x22;password&#x22; class=&#x22;form-control&#x22;
+                                                    name=&#x22;password_confirmation&#x22; required autocomplete=&#x22;new-password&#x22;&#x3E;
+                                            &#x3C;/div&#x3E;
+                                        &#x3C;/div&#x3E;
+
+                                        &#x3C;div class=&#x22;form-group row mb-0&#x22;&#x3E;
+                                            &#x3C;div class=&#x22;col-md-6 offset-md-4&#x22;&#x3E;
+                                                &#x3C;button type=&#x22;submit&#x22; class=&#x22;btn btn-primary&#x22;&#x3E;
+                                                    {{ __(&#x27;Register&#x27;) }}
+                                                &#x3C;/button&#x3E;
+                                            &#x3C;/div&#x3E;
+                                        &#x3C;/div&#x3E;
+                                    &#x3C;/form&#x3E;
+                                &#x3C;/div&#x3E;
+                            &#x3C;/div&#x3E;
+                        &#x3C;/div&#x3E;
+                    &#x3C;/div&#x3E;
+                &#x3C;/div&#x3E;
+                @endsection
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Le formulaire modifié, il nous faut maintenant modifier le controller qui va réceptionner nos data et les
+            sauver dans la base de données. pour ça rendez-vous dans le fichier <span class="style-folder">Open ->
+              app\Http\Controllers\Auth\RegisterController.php</span> et copier ce code.
+          </p>
+          <!-- accordeon modif Post factory -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+              data-target="#registreController" aria-expanded="false" aria-controls="registreController">
+              Code final : RegisterController.php
+            </button>
+          </p>
+          <div class="collapse" id="registreController">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                &#x3C;?php
+
+                namespace App\Http\Controllers\Auth;
+
+                use App\Http\Controllers\Controller;
+                use App\Providers\RouteServiceProvider;
+                use App\User;
+                use Illuminate\Foundation\Auth\RegistersUsers;
+                use Illuminate\Support\Facades\Hash;
+                use Illuminate\Support\Facades\Validator;
+
+                class RegisterController extends Controller
+                {
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Register Controller
+                    |--------------------------------------------------------------------------
+                    |
+                    | This controller handles the registration of new users as well as their
+                    | validation and creation. By default this controller uses a trait to
+                    | provide this functionality without requiring any additional code.
+                    |
+                    */
+                    use RegistersUsers;
+
+                    /**
+                     * Where to redirect users after registration.
+                     *
+                     * @var string
+                     */
+                    protected $redirectTo = RouteServiceProvider::HOME;
+
+                    /**
+                     * Create a new controller instance.
+                     *
+                     * @return void
+                     */
+                    public function __construct()
+                    {
+                        $this-&#x3E;middleware(&#x27;guest&#x27;);
+                    }
+
+                    /**
+                     * Get a validator for an incoming registration request.
+                     *
+                     * @param  array  $data
+                     * @return \Illuminate\Contracts\Validation\Validator
+                     */
+                    protected function validator(array $data)
+                    {
+                        return Validator::make($data, [
+                            &#x27;name&#x27; =&#x3E; [&#x27;required&#x27;, &#x27;string&#x27;, &#x27;max:255&#x27;],
+                            &#x27;firstname&#x27; =&#x3E; [&#x27;required&#x27;, &#x27;string&#x27;, &#x27;max:255&#x27;],
+                            &#x27;email&#x27; =&#x3E; [&#x27;required&#x27;, &#x27;string&#x27;, &#x27;email&#x27;, &#x27;max:255&#x27;, &#x27;unique:users&#x27;],
+                            &#x27;password&#x27; =&#x3E; [&#x27;required&#x27;, &#x27;string&#x27;, &#x27;min:8&#x27;, &#x27;confirmed&#x27;],
+                        ]);
+                    }
+
+                    /**
+                     * Create a new user instance after a valid registration.
+                     *
+                     * @param  array  $data
+                     * @return \App\User
+                     */
+                    protected function create(array $data)
+                    {
+                        return User::create([
+                            &#x27;name&#x27; =&#x3E; $data[&#x27;name&#x27;],
+                            &#x27;firstname&#x27; =&#x3E; $data[&#x27;firstname&#x27;],
+                            &#x27;email&#x27; =&#x3E; $data[&#x27;email&#x27;],
+                            &#x27;password&#x27; =&#x3E; Hash::make($data[&#x27;password&#x27;]),
+                        ]);
+                    }
+                }
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Voilà, nous pouvons, nous loger et/ou nous enregistrer. Nous pouvons afficher nos postes avec en plus notre
+            paginations. Nous voyons qu'il y a un boutons read more. Appuyons dessus et voyons ce que cela fait ? Rien !
+            Et oui, si nous regardons dans la barre d'adresse nous voyons la route suivie du id de l'article. En faite
+            nous suivons la route Post/{id}. Un aperçu dans nous route avec artisan nous renseigneras vite sur nos
+            possibilitées.
+            La route c'est
+          </p>
+          <span class="style-console"> GET|HEAD | Post/{Post} | Post.show |
+            App\Http\Controllers\PostController@show</span>
+          <p>
+            Allons créer notre méthode show de notre controller Post. <span class="style-folder">Open ->
+              app\Http\Controllers\PostController.php</span> et collez le code suivant.
+          </p>
+          <!-- accordeon modif Post factory -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#showPost"
+              aria-expanded="false" aria-controls="showPost">
+              Code final : function Post.show : app\Http\Controllers\PostController.php
+            </button>
+          </p>
+          <div class="collapse" id="showPost">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                &lt;?php
+                
+                namespace App\Http\Controllers;
+                use Illuminate\Http\Request;
+                
+                
+                use Auth;
+                use App\Post;
+                use App\User;
+                use App\Comment;
+                
+                class PostController extends Controller
+                {
+                /**
+                * Display a listing of the resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function index()
+                {
+                // nous mettons dans $post les poste sous forme de tableau
+                // le tout trier selon la colonne title, et nous souhaitons une pagination de 4/pages
+                $post = Post::orderBy(&apos;title&apos;, &apos;asc&apos;)-&gt;paginate(4);
+                // nous demandons de retourner la vue de notre route et passons le tableau &agrave; la vue
+                return view(&apos;Post.index&apos;)-&gt;with(&apos;posts&apos;,$post);
+                }
+                
+                /**
+                * Show the form for creating a new resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function create()
+                {
+                //
+                }
+                
+                /**
+                * Store a newly created resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @return \Illuminate\Http\Response
+                */
+                public function store(Request $request)
+                {
+                //
+                }
+                
+                /**
+                * Display the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function show($id)
+                {
+                // nous demandons &agrave; la fonction de retourner le post ayant l&apos;id $id.
+                $posts = Post::find($id);
+                // nous allons chercher les donn&eacute;es de l&apos;user ayant l&apos;id correspondant &agrave; l&apos;id_user du post.
+                $user = User::find($posts-&gt;get(&apos;user_id&apos;));
+                // nous demandons la vue Post.show.blade.php, accompagner des 2 variables.
+                // compact est plus ou moins la m&ecirc;me chose que with(), l&apos;un c&apos;est php l&apos;autre laravel.
+                return view(&apos;Post.show&apos;,compact(&apos;user&apos;,&apos;posts&apos;));
+                }
+                
+                /**
+                * Show the form for editing the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function edit(Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Update the specified resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function update(Request $request, Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Remove the specified resource from storage.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function destroy(Post $post)
+                {
+                //
+                }
+                }
+
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Nous pouvons maintenant créer notre vue. <span class="style-folder">Create & Open ->
+              resources\views\Post\show.blade.php </span> et collez le code suivant.
+          </p>
+          <!-- accordeon modif post.show.blade.php -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postShow"
+              aria-expanded="false" aria-controls="postShow">
+              Code final : View show : resources\views\Post\show.blade.php
+            </button>
+          </p>
+          <div class="collapse" id="postShow">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+              <!--content  -->
+              @extends(&apos;layouts.app&apos;)
+
+              @section(&apos;content&apos;)
+              &lt;div class=&quot;container w-100 &quot;&gt;
+                  &lt;div class=&quot;row justify-content-center&quot;&gt;
+                      &lt;div class=&quot;col-md-10&quot;&gt;
+                          &lt;div class=&quot;card mt-4&quot;&gt;
+                              &lt;div class=&quot;card-body&quot;&gt;
+                                      &#x20;&#x40;&#x69;&#x66;&#x20;&#x28;&#x73;&#x65;&#x73;&#x73;&#x69;&#x6F;&#x6E;&#x28;&#x27;&#x73;&#x75;&#x63;&#x63;&#x65;&#x73;&#x73;&#x5F;&#x6D;&#x6F;&#x64;&#x69;&#x66;&#x79;&#x27;&#x29;&#x29;&#xA;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x3C;&#x64;&#x69;&#x76;&#x20;&#x63;&#x6C;&#x61;&#x73;&#x73;&#x3D;&#x22;&#x61;&#x6C;&#x65;&#x72;&#x74;&#x20;&#x61;&#x6C;&#x65;&#x72;&#x74;&#x2D;&#x73;&#x75;&#x63;&#x63;&#x65;&#x73;&#x73;&#x22;&#x3E;&#xA;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x7B;&#x7B;&#x20;&#x73;&#x65;&#x73;&#x73;&#x69;&#x6F;&#x6E;&#x28;&#x27;&#x73;&#x75;&#x63;&#x63;&#x65;&#x73;&#x73;&#x5F;&#x6D;&#x6F;&#x64;&#x69;&#x66;&#x79;&#x27;&#x29;&#x20;&#x7D;&#x7D;&#xA;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x3C;&#x2F;&#x64;&#x69;&#x76;&#x3E;&#xA;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x40;&#x65;&#x6E;&#x64;&#x69;&#x66;
+                                  &lt;img src=&quot;/uploads/avatars/{{ $posts-&gt;user-&gt;avatar_url }}&quot;
+                                      style=&quot;width:100px; height:100px; float:left; border-radius:50%; margin-right:25px;&quot;&gt;
+                                  &lt;H4 class=&quot;mt-4 mb-4&quot;&gt; {{ $posts-&gt;title }} &lt;/H4&gt;
+                                  &lt;small&gt; cr&eacute;&eacute; le {{ $posts-&gt;created_at }}&lt;/small&gt;
+                                  &lt;small&gt; par {{ $posts-&gt;user-&gt;name }}&lt;/small&gt;
+              
+                                  &lt;p class=&quot;text-justify mt-4&quot; style=&quot;white-space:pre-line;&quot;&gt;{!! $posts-&gt;content !!}&lt;/p&gt;
+                              &lt;/div&gt;
+                              @guest
+                              @else
+                              &lt;div class=&quot;card-footer mt-4&quot;&gt;
+                                  @if ( Auth::user()-&gt;id == $posts-&gt;user_id)
+                                  &lt;div class=&quot;row&quot;&gt;
+                                      &lt;div class=&quot;col-10&quot;&gt;
+                                          &lt;form method=&quot;POST&quot; action=&quot;{{ url(&apos;Post/&apos;.$posts-&gt;id) }}&quot;&gt;
+                                              &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; value=&quot;modification&quot;&gt;
+                                                  &lt;a style=&quot;color:white;&quot; href=&quot;{{ URL::to(&apos;Post/&apos;.$posts-&gt;id.&apos;/edit&apos;) }}&quot;&gt;Modifier
+                                                      mon
+                                                      article&lt;/a&gt;
+                                              &lt;/button&gt;
+              
+                                              @csrf
+                                              @method(&apos;DELETE&apos;)
+                                              &lt;button class=&quot;btn btn-primary&quot; type=&quot;submit&quot;
+                                                  onclick=&quot;return confirm(&apos;&ecirc;tes vous sur ?&apos;)&quot; type=&quot;submit&quot;&gt;Delete&lt;/button&gt;
+                                          &lt;/form&gt;
+                                      &lt;/div&gt;
+                                  &lt;/div&gt;
+                                  @endif
+                              &lt;/div&gt;
+                              @endguest
+                          &lt;/div&gt;
+                      &lt;/div&gt;
+                  &lt;/div&gt;
+              &lt;/div&gt;
+              @endsection
+              
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            tout ça c'est jolie mais on n'aimerais bien pouvoir créer un nouveau poste. Et bien c'est à quoi nous allons
+            nous attacher. un coup d'oeil dans les route et hop nous allons à dans notre <span class="style-folder">Open
+              -> app\Http\Controllers\PostController.php</span> et on colle le code suivant.
+          </p>
+          <!-- accordeon modif create function post controller -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+              data-target="#createController" aria-expanded="false" aria-controls="createController">
+              Code final : function Post.create : app\Http\Controllers\PostController.php
+            </button>
+          </p>
+          <div class="collapse" id="createController">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                &lt;?php
+                
+                namespace App\Http\Controllers;
+                use Illuminate\Http\Request;
+                
+                
+                use Auth;
+                use App\Post;
+                use App\User;
+                use App\Comment;
+                
+                class PostController extends Controller
+                {
+                /**
+                * Display a listing of the resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function index()
+                {
+                // nous mettons dans $post les poste sous forme de tableau
+                // le tout trier selon la colonne title, et nous souhaitons une pagination de 4/pages
+                $post = Post::orderBy(&apos;title&apos;, &apos;asc&apos;)-&gt;paginate(4);
+                // nous demandons de retourner la vue de notre route et passons le tableau &agrave; la vue
+                return view(&apos;Post.index&apos;)-&gt;with(&apos;posts&apos;,$post);
+                }
+                
+                /**
+                * Show the form for creating a new resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function create()
+                {
+                return view(&apos;Post.create&apos;)-&gt;with(&apos;user&apos;,&apos;user&apos;);
+                }
+                
+                /**
+                * Store a newly created resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @return \Illuminate\Http\Response
+                */
+                public function store(Request $request)
+                {
+                //
+                }
+                
+                /**
+                * Display the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function show($id)
+                {
+                // nous demandons &agrave; la fonction de retourner le post ayant l&apos;id $id.
+                $posts = Post::find($id);
+                // nous allons chercher les donn&eacute;es de l&apos;user ayant l&apos;id correspondant &agrave; l&apos;id_user du post.
+                $user = User::find($posts-&gt;get(&apos;user_id&apos;));
+                // nous demandons la vue Post.show.blade.php, accompagner des 2 variables.
+                // compact est plus ou moins la m&ecirc;me chose que with(), l&apos;un c&apos;est php l&apos;autre laravel.
+                return view(&apos;Post.show&apos;,compact(&apos;user&apos;,&apos;posts&apos;));
+                }
+                
+                /**
+                * Show the form for editing the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function edit(Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Update the specified resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function update(Request $request, Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Remove the specified resource from storage.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function destroy(Post $post)
+                {
+                //
+                }
+                }
+
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            vous l'avez deviné, ensuite nous allons créer un post mais pour ça nous devons ajouter une option dans
+            notre menu...Allons y ! <span class="style-folder">Open -> resources\views\layouts\app.blade.php</span>
+          </p>
+          <!-- accordeon add menu create post -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+              data-target="#addcreateposttomenu" aria-expanded="false" aria-controls="addcreateposttomenu">
+              Code : resources\views\layouts\app.blade.php
+            </button>
+          </p>
+          <div class="collapse" id="addcreateposttomenu">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+              &lt;!doctype html&gt;
+              &lt;html lang=&quot;{{ str_replace(&apos;_&apos;, &apos;-&apos;, app()-&gt;getLocale()) }}&quot;&gt;
+              
+              &lt;head&gt;
+              &lt;meta charset=&quot;utf-8&quot;&gt;
+              &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+              
+              &lt;!-- CSRF Token --&gt;
+              &lt;meta name=&quot;csrf-token&quot; content=&quot;{{ csrf_token() }}&quot;&gt;
+              
+              &lt;title&gt;{{ config(&apos;app.name&apos;, &apos;Laravel&apos;) }}&lt;/title&gt;
+              
+              &lt;!-- Scripts --&gt;
+              &lt;script src=&quot;{{ asset(&apos;js/app.js&apos;) }}&quot; defer&gt;&lt;/script&gt;
+              
+              &lt;!-- Fonts --&gt;
+              &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//fonts.gstatic.com&quot;&gt;
+              &lt;link href=&quot;https://fonts.googleapis.com/css?family=Nunito&quot; rel=&quot;stylesheet&quot;&gt;
+              
+              &lt;!-- Styles --&gt;
+              &lt;link href=&quot;{{ asset(&apos;css/app.css&apos;) }}&quot; rel=&quot;stylesheet&quot;&gt;
+              &lt;/head&gt;
+              
+              &lt;body&gt;
+              &lt;div id=&quot;app&quot;&gt;
+              &lt;nav class=&quot;navbar navbar-expand-md navbar-light bg-white shadow-sm&quot;&gt;
+              &lt;div class=&quot;container&quot;&gt;
+              &lt;a class=&quot;navbar-brand&quot; href=&quot;{{ url(&apos;/&apos;) }}&quot;&gt;
+              {{ config(&apos;app.name&apos;, &apos;Laravel&apos;) }}
+              &lt;/a&gt;
+              &lt;button class=&quot;navbar-toggler&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot;
+              data-target=&quot;#navbarSupportedContent&quot; aria-controls=&quot;navbarSupportedContent&quot;
+              aria-expanded=&quot;false&quot;
+              aria-label=&quot;{{ __(&apos;Toggle navigation&apos;) }}&quot;&gt;
+              &lt;span class=&quot;navbar-toggler-icon&quot;&gt;&lt;/span&gt;
+              &lt;/button&gt;
+              
+              &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarSupportedContent&quot;&gt;
+              &lt;!-- Left Side Of Navbar --&gt;
+              &lt;ul class=&quot;navbar-nav mr-auto&quot;&gt;
+              
+              &lt;/ul&gt;
+              
+              &lt;!-- Right Side Of Navbar --&gt;
+              &lt;ul class=&quot;navbar-nav ml-auto&quot;&gt;
+              &lt;!-- Authentication Links --&gt;
+              @guest
+              &lt;li class=&quot;nav-item&quot;&gt;
+              &lt;a class=&quot;nav-link&quot;
+              href=&quot;{{ route(&apos;login&apos;) }}&quot;&gt;{{ __(&apos;Login&apos;) }}&lt;/a&gt;
+              &lt;/li&gt;
+              @if (Route::has(&apos;register&apos;))
+              &lt;li class=&quot;nav-item&quot;&gt;
+              &lt;a class=&quot;nav-link&quot;
+              href=&quot;{{ route(&apos;register&apos;) }}&quot;&gt;{{ __(&apos;Register&apos;) }}&lt;/a&gt;
+              &lt;/li&gt;
+              @endif
+              @else
+              &lt;li class=&quot;nav-item dropdown&quot;&gt;
+              &lt;a id=&quot;navbarDropdown&quot; class=&quot;nav-link dropdown-toggle&quot; href=&quot;#&quot;
+              role=&quot;button&quot;
+              data-toggle=&quot;dropdown&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot; v-pre&gt;
+              {{ Auth::user()-&gt;name }} &lt;span class=&quot;caret&quot;&gt;&lt;/span&gt;
+              &lt;/a&gt;
+              
+              &lt;div class=&quot;dropdown-menu dropdown-menu-right&quot; aria-labelledby=&quot;navbarDropdown&quot;&gt;
+              &lt;a class=&quot;dropdown-item&quot; href=&quot;{{ route(&apos;logout&apos;) }}&quot;
+              onclick=&quot;event.preventDefault();
+              document.getElementById(&apos;logout-form&apos;).submit();&quot;&gt;
+              {{ __(&apos;Logout&apos;) }}
+              &lt;/a&gt;
+              
+              &lt;form id=&quot;logout-form&quot; action=&quot;{{ route(&apos;logout&apos;) }}&quot; method=&quot;POST&quot;
+              style=&quot;display: none;&quot;&gt;
+              @csrf
+              &lt;/form&gt;
+              &lt;/div&gt;
+              
+              &lt;/li&gt;
+              &lt;li&gt;
+              &lt;a class=&quot;nav-link&quot;
+              href=&quot;{{ route(&apos;Post.create&apos;) }}&quot;&gt;{{ __(&apos;Create Post&apos;) }}&lt;/a&gt;
+              &lt;/li&gt;
+              @endguest
+              &lt;/ul&gt;
+              &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;/nav&gt;
+              
+              &lt;main class=&quot;py-4&quot;&gt;
+              @yield(&apos;content&apos;)
+              &lt;/main&gt;
+              &lt;/div&gt;
+              &lt;/body&gt;
+              
+              &lt;/html&gt;
+
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Maintenant allons créer notre vue <span class="style-folder">Create & open ->
+              resources\views\Post\create.blade.php</span>
+          </p>
+          <!-- accordeon view of create Post -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#viewcreatePost"
+              aria-expanded="false" aria-controls="viewcreatePost">
+              Code final : view Post.create : resources\views\Post\create.blade.php
+            </button>
+          </p>
+          <div class="collapse" id="viewcreatePost">
+            <div class="card card-body">
+              <pre class="pre-line style-code ">
+              <!--content  -->
+              @extends(&apos;layouts.app&apos;)
+
+              @section(&apos;content&apos;)
+              &lt;div class=&quot;container&quot;&gt;
+                  &lt;div class=&quot;row&quot;&gt;
+                      &lt;div class=&quot;col-md-12 col-md-offset-2&quot;&gt;
+                          &lt;div class=&quot;card&quot;&gt;
+                              &lt;div class=&quot;card-header&quot;&gt;Ajout d&apos;un article&lt;/div&gt;
+                              &lt;div class=&quot;card-body&quot;&gt;
+                                  @if (session(&apos;error&apos;))
+                                  &lt;div class=&quot;alert alert-danger&quot;&gt;
+                                      {{ session(&apos;error&apos;) }}
+                                  &lt;/div&gt;
+                                  @endif
+                                  @if (session(&apos;success&apos;))
+                                  &lt;div class=&quot;alert alert-success&quot;&gt;
+                                      {{ session(&apos;success&apos;) }}
+                                  &lt;/div&gt;
+                                  @endif
+                                  &lt;form method=&quot;POST&quot; action=&quot;{{ url(&apos;Post&apos;) }}&quot;&gt;
+                                      @csrf
+                                      @method(&apos;POST&apos;)
+
+                                      &lt;p&gt;&lt;input type=&quot;text&quot; name=&quot;title&quot; placeholder=&quot;Votre Titre&quot; value=&quot;{{ old(&apos;title&apos;) }}&quot;&gt;&lt;/p&gt;
+                                      @if ($errors-&gt;has(&apos;title&apos;))
+                                      &lt;p&gt; {{ $errors-&gt;first(&apos;title&apos;)}} &lt;/p&gt;
+                                      @endif
+
+
+                                      &lt;textarea id=&quot;url-conversion-absolute-2&quot; name=&quot;content&quot; cols=&quot;85&quot; rows=&quot;20&quot;
+                                          value=&quot;{{ old(&apos;texte&apos;) }}&quot;&gt;&lt;/textarea&gt;
+
+                                      &lt;div class=&quot;form-group&quot;&gt;
+                                          &lt;div class=&quot;col-md-6 col-md-offset-4&quot;&gt;
+                                              &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;
+                                                  Poster l&apos;article
+                                              &lt;/button&gt;
+                                          &lt;/div&gt;
+                                      &lt;/div&gt;
+                                  &lt;/form&gt;
+                              &lt;/div&gt;
+                          &lt;/div&gt;
+                      &lt;/div&gt;
+                  &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;script src=&quot;https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js&quot; referrerpolicy=&quot;origin&quot;&gt;
+              &lt;/script&gt;
+              &lt;script&gt;
+                  tinymce.init({
+                  selector: &apos;#url-conversion-absolute-2&apos;,
+                  height: 230,
+                  plugins: &apos;link image code imagetools&apos;,
+                  relative_urls: false,
+                  remove_script_host: false,
+                  content_css: [
+                  &apos;//fonts.googleapis.com/css?family=Lato:300,300i,400,400i&apos;,
+                  &apos;//www.tiny.cloud/css/codepen.min.css&apos;
+                  ]
+                  });
+              &lt;/script&gt;
+    @endsection
+
+
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Maintenant allons dans notre menu et allons créer un nouveau post. Avez-vous remarqué que dans notre vue
+            'Post.create', nous avons importé via le cdnj un module tinyMCE, qui va nous permettre d'entrer plus
+            facilement du texte et maintenir une mise en page correcte. C'est une version démo pour ce workshop.
+          </p>
+          <p>
+            Je vous invite a entrer votre texte, photo, etc... mais n'envoyez pas encore.Que devons nous encore faire ?
+            Sauver notre poste. Et cela va se faire avec la methode 'Post.store' dans notre PostController.
+            <span class="style-folder">Open -> app\Http\Controllers\PostController.php</open>
+          </p>
+          <!-- accordeon function post.store -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postStore"
+              aria-expanded="false" aria-controls="postStore">
+              Code final : function Post.store : app\Http\Controllers\PostController.php
+            </button>
+          </p>
+          <div class="collapse" id="postStore">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+              <!--content  -->
+              &lt;?php
+              
+              namespace App\Http\Controllers;
+              
+              use Illuminate\Support\Facades\Auth;
+              
+              use Illuminate\Http\Request;
+              
+              
+              use App\Post;
+              use App\User;
+              use App\Comment;
+              
+              class PostController extends Controller
+              {
+              /**
+              * Display a listing of the resource.
+              *
+              * @return \Illuminate\Http\Response
+              */
+              public function index()
+              {
+              // nous mettons dans $post les poste sous forme de tableau
+              // le tout trier selon la colonne title, et nous souhaitons une pagination de 4/pages
+              $post = Post::orderBy(&apos;title&apos;, &apos;asc&apos;)-&gt;paginate(4);
+              // nous demandons de retourner la vue de notre route et passons le tableau &agrave; la vue
+              return view(&apos;Post.index&apos;)-&gt;with(&apos;posts&apos;, $post);
+              }
+              
+              /**
+              * Show the form for creating a new resource.
+              *
+              * @return \Illuminate\Http\Response
+              */
+              public function create()
+              {
+              return view(&apos;Post.create&apos;)-&gt;with(&apos;user&apos;, &apos;user&apos;);
+              }
+              
+              /**
+              * Store a newly created resource in storage.
+              *
+              * @param \Illuminate\Http\Request $request
+              * @return \Illuminate\Http\Response
+              */
+              public function store(Request $request)
+              {
+              request()-&gt;validate([
+              &apos;title&apos; =&gt; [&apos;bail&apos;, &apos;required&apos;],
+              &apos;content&apos; =&gt; [&apos;bail&apos;, &apos;required&apos;, &apos;min:20&apos;],
+              ], [
+              &apos;content.min&apos; =&gt; &apos;Pour une raison de diffusion, votre message doit faire :min caract&egrave;res.&apos;
+              
+              ]);
+              
+              $post = new \App\Post;
+              $user = Auth::id();
+              $post-&gt;title = request(&apos;title&apos;);
+              $post-&gt;content = request(&apos;content&apos;);
+              $post-&gt;like = &quot;0&quot;;
+              $post-&gt;user_id = $user;
+              $post-&gt;save();
+              
+              return redirect(&apos;/home&apos;)-&gt;with(&quot;success&quot;, &quot;Votre message a bien &eacute;t&eacute;
+              envoy&eacute; !&quot;);
+              }
+              
+              /**
+              * Display the specified resource.
+              *
+              * @param \App\Post $post
+              * @return \Illuminate\Http\Response
+              */
+              public function show($id)
+              {
+              // nous demandons &agrave; la fonction de retourner le post ayant l&apos;id $id.
+              $posts = Post::find($id);
+              // nous allons chercher les donn&eacute;es de l&apos;user ayant l&apos;id correspondant &agrave; l&apos;id_user du post.
+              $user = User::find($posts-&gt;get(&apos;user_id&apos;));
+              // nous demandons la vue Post.show.blade.php, accompagner des 2 variables.
+              // compact est plus ou moins la m&ecirc;me chose que with(), l&apos;un c&apos;est php l&apos;autre laravel.
+              return view(&apos;Post.show&apos;, compact(&apos;user&apos;, &apos;posts&apos;));
+              }
+              
+              /**
+              * Show the form for editing the specified resource.
+              *
+              * @param \App\Post $post
+              * @return \Illuminate\Http\Response
+              */
+              public function edit(Post $post)
+              {
+              //
+              }
+              
+              /**
+              * Update the specified resource in storage.
+              *
+              * @param \Illuminate\Http\Request $request
+              * @param \App\Post $post
+              * @return \Illuminate\Http\Response
+              */
+              public function update(Request $request, Post $post)
+              {
+              //
+              }
+              
+              /**
+              * Remove the specified resource from storage.
+              *
+              * @param \App\Post $post
+              * @return \Illuminate\Http\Response
+              */
+              public function destroy(Post $post)
+              {
+              //
+              }
+              }
+
+
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Maintenant vous pouvez rechercher votre nouveau poste dans la liste. Cliquez sur le bouton pour l'ouvrir et
+            vous pouvez constatez qu'il à gardé sa mise en page. Mieux vous avez le bouton qui vous permet de le
+            modifier car ce post vous appartient. Donc la suite logique serait de créer un controller qui m'afficherais
+            le formulaire d'édition et le controller d'update. Et bien faisons ça ! Vous pouvez déjà appuyé sur le
+            bouton modifier mon article et vous arrivez sur une page blanche.
+          </p>
+          <span class="style-folder">Open -> app\Http\Controllers\PostController.php</span>
+          <!-- accordeon function Post.edit -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postEdit"
+              aria-expanded="false" aria-controls="postEdit">
+              Code final : Controller post.edit : app\Http\Controllers\PostController.php
+            </button>
+          </p>
+          <div class="collapse" id="postEdit">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                &lt;?php
+                namespace App\Http\Controllers;
+
+                use Illuminate\Http\Request;
+                use Auth;
+                use App\Post;
+                use App\User;
+                use App\Comment;
+                
+                class PostController extends Controller
+                {
+                /**
+                * Display a listing of the resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function index()
+                {
+                // nous mettons dans $post les poste sous forme de tableau
+                // le tout trier selon la colonne title, et nous souhaitons une pagination de 4/pages
+                $post = Post::orderBy(&apos;title&apos;, &apos;asc&apos;)-&gt;paginate(4);
+                // nous demandons de retourner la vue de notre route et passons le tableau &agrave; la vue
+                return view(&apos;Post.index&apos;)-&gt;with(&apos;posts&apos;,$post);
+                }
+                
+                /**
+                * Show the form for creating a new resource.
+                *
+                * @return \Illuminate\Http\Response
+                */
+                public function create()
+                {
+                return view(&apos;Post.create&apos;)-&gt;with(&apos;user&apos;,&apos;user&apos;);
+                }
+                
+                /**
+                * Store a newly created resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @return \Illuminate\Http\Response
+                */
+                public function store(Request $request)
+                {
+                request()-&gt;validate([
+                &apos;title&apos; =&gt; [&apos;bail&apos;,&apos;required&apos;],
+                &apos;content&apos; =&gt; [&apos;bail&apos;,&apos;required&apos;, &apos;min:20&apos;],
+                ],[
+                &apos;content.min&apos; =&gt; &apos;Pour une raison de diffusion, votre message doit faire :min caract&egrave;res.&apos;
+                
+                ]);
+                
+                $post = new \App\Post;
+                $user = Auth::id();
+                $post-&gt;title = request(&apos;title&apos;);
+                $post-&gt;content = request(&apos;content&apos;);
+                $post-&gt;like = &quot;0&quot;;
+                $post-&gt;user_id = $user;
+                $post-&gt;save();
+                
+                return redirect(&apos;/home&apos;)-&gt;with(&quot;success&quot;,&quot;Votre message a bien &eacute;t&eacute;
+                envoy&eacute; !&quot;);
+                }
+                
+                /**
+                * Display the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function show($id)
+                {
+                // nous demandons &agrave; la fonction de retourner le post ayant l&apos;id $id.
+                $posts = Post::find($id);
+                // nous allons chercher les donn&eacute;es de l&apos;user ayant l&apos;id correspondant &agrave; l&apos;id_user du post.
+                $user = User::find($posts-&gt;get(&apos;user_id&apos;));
+                // nous demandons la vue Post.show.blade.php, accompagner des 2 variables.
+                // compact est plus ou moins la m&ecirc;me chose que with(), l&apos;un c&apos;est php l&apos;autre laravel.
+                return view(&apos;Post.show&apos;,compact(&apos;user&apos;,&apos;posts&apos;));
+                }
+                
+                /**
+                * Show the form for editing the specified resource.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function edit($id)
+                {
+                $posts = Post::find($id);
+                $user = Auth::id();
+                return view(&apos;post/edit&apos;,compact(&apos;posts&apos;,&apos;user&apos;));
+                }
+                
+                /**
+                * Update the specified resource in storage.
+                *
+                * @param \Illuminate\Http\Request $request
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function update(Request $request, Post $post)
+                {
+                //
+                }
+                
+                /**
+                * Remove the specified resource from storage.
+                *
+                * @param \App\Post $post
+                * @return \Illuminate\Http\Response
+                */
+                public function destroy(Post $post)
+                {
+                //
+                }
+                }
+
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            <span class="style-folder">Create & Open -> resources\views\Post\edit.blade.php</span>
+          </p>
+          <!-- accordeon view.post.edit -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#viewpostedir"
+              aria-expanded="false" aria-controls="viewpostedir">
+              Code final : View Post.edit : resources\views\Post\edit.blade.php
+            </button>
+          </p>
+          <div class="collapse" id="viewpostedir">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                @extends(&apos;layouts.app&apos;)
+
+                @section(&apos;content&apos;)
+                &lt;div class=&quot;container&quot;&gt;
+                    &lt;div class=&quot;row&quot;&gt;
+                        &lt;div class=&quot;col-md-12 col-md-offset-2&quot;&gt;
+                            &lt;div class=&quot;card&quot;&gt;
+                                &lt;div class=&quot;card-header&quot;&gt;Modification d&apos;un article&lt;/div&gt;
+                                &lt;div class=&quot;card-body&quot;&gt;
+                                    @if (session(&apos;error&apos;))
+                                    &lt;div class=&quot;alert alert-danger&quot;&gt;
+                                        {{ session(&apos;error&apos;) }}
+                                    &lt;/div&gt;
+                                    @endif
+                                    @if (session(&apos;success&apos;))
+                                    &lt;div class=&quot;alert alert-success&quot;&gt;
+                                        {{ session(&apos;success&apos;) }}
+                                    &lt;/div&gt;
+                                    @endif
+                                    &lt;form method=&quot;POST&quot; action=&quot;{{ url(&apos;Post/&apos;.$posts-&gt;id) }}&quot;&gt;
+                                        @csrf
+                                        @method(&apos;PATCH&apos;)
+                                        &lt;input type=&quot;hidden&quot; name=&quot;user_id&quot; value=&quot;{{ $posts-&gt;user_id }}&quot;&gt;
+                                        &lt;input type=&quot;hidden&quot; name=&quot;post_id&quot; value=&quot;{{ $posts-&gt;id }}&quot;&gt;
+
+                                        &lt;p&gt;&lt;input type=&quot;text&quot; name=&quot;title&quot; placeholder=&quot;Votre Titre&quot;
+                                                value=&quot;{{ $posts-&gt;title}} {{ old(&apos;title&apos;) }}&quot;&gt;&lt;/p&gt;
+                                        @if ($errors-&gt;has(&apos;title&apos;))
+                                        &lt;p&gt; {{ $errors-&gt;first(&apos;title&apos;)}} &lt;/p&gt;
+                                        @endif
+                                        &lt;textarea id=&quot;url-conversion-absolute-2&quot; name=&quot;content&quot; cols=&quot;85&quot;
+                                            rows=&quot;20&quot;&gt;{{ $posts-&gt;content }} {{ old(&apos;texte&apos;) }}&lt;/textarea&gt;
+                                        &lt;div class=&quot;form-group&quot;&gt;
+                                            &lt;div class=&quot;col-md-6 col-md-offset-4&quot;&gt;
+                                                &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;
+                                                    Mise &agrave; jour l&apos;article
+                                                &lt;/button&gt;
+                                            &lt;/div&gt;
+                                        &lt;/div&gt;
+                                    &lt;/form&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;script src=&quot;https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js&quot; referrerpolicy=&quot;origin&quot;&gt;
+                &lt;/script&gt;
+                &lt;script&gt;
+                    tinymce.init({
+                    selector: &apos;#url-conversion-absolute-2&apos;,
+                    height: 230,
+                    plugins: &apos;link image code imagetools&apos;,
+                    relative_urls: false,
+                    remove_script_host: false,
+                    content_css: [
+                    &apos;//fonts.googleapis.com/css?family=Lato:300,300i,400,400i&apos;,
+                    &apos;//www.tiny.cloud/css/codepen.min.css&apos;
+                    ]
+                    });
+                &lt;/script&gt;
+                @endsection
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Il nous reste à créer la fonction update dans notre controller, en regardant la route nous voyons que nous
+            devons envoyer notre formulaire d'édition vers la route Post/{post} avec une methode PUT ou PATCH c'est
+            cette dernière que l'on a choisit pour une raison de rapidité.
+            <span class="style-folder">Open -> app\Http\Controllers\PostController.php</span> et coller le code suivant.
+          </p>
+          <!-- accordeon mothode Post.update -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#updatepost"
+              aria-expanded="false" aria-controls="updatepost">
+              Code final : controller Post.update : app\Http\Controllers\PostController.php
+            </button>
+          </p>
+          <div class="collapse" id="updatepost">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+                <!--content  -->
+                **
+                * Update the specified resource in storage.
+                *
+                * @param  \Illuminate\Http\Request  $request
+                * @param  \App\Post  $post
+                * @return \Illuminate\Http\Response
+                */
+                public function update(Request $request, $id)
+                {
+                    $posts = Post::find($id);
+                    $updatePost = Post::find($request->post_id);
+                    $updatePost->title = $request->title;
+                    $updatePost->content = $request->content;
+                    $updatePost->update();
+                    return redirect('Post/' . $posts->id)->with('success_modify', 'Votre post a bien été modifié !');
+
+
+                }
+              
+            </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Pour finir cette séquence sur les postes il nous reste plus qu'à voir la function delete. Nous retournons
+            dans notre controller. <span class="style-folder">Open -> app\Http\Controllers\PostController.php</span> et
+            collez le code suivant.
+          </p>
+          <!-- accordeon controller post.delete -->
+          <p>
+            <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postDelete"
+              aria-expanded="false" aria-controls="postDelete">
+              Code final : Controller Post.delete : app\Http\Controllers\PostController.php
+            </button>
+          </p>
+          <div class="collapse" id="postDelete">
+            <div class="card card-body">
+              <pre class="pre-line style-code">
+            <!--content  -->
+            &lt;?php
+            namespace App\Http\Controllers;
+            
+            use Illuminate\Http\Request;
+            use Auth;
+            use App\Post;
+            use App\User;
+            use App\Comment;
+            
+            class PostController extends Controller
+            {
+            /**
+            * Display a listing of the resource.
+            *
+            * @return \Illuminate\Http\Response
+            */
+            public function index()
+            {
+            // nous mettons dans $post les poste sous forme de tableau
+            // le tout trier selon la colonne title, et nous souhaitons une pagination de 4/pages
+            $post = Post::orderBy(&apos;title&apos;, &apos;asc&apos;)-&gt;paginate(4);
+            // nous demandons de retourner la vue de notre route et passons le tableau &agrave; la vue
+            return view(&apos;Post.index&apos;)-&gt;with(&apos;posts&apos;,$post);
+            }
+            
+            /**
+            * Show the form for creating a new resource.
+            *
+            * @return \Illuminate\Http\Response
+            */
+            public function create()
+            {
+            return view(&apos;Post.create&apos;)-&gt;with(&apos;user&apos;,&apos;user&apos;);
+            }
+            
+            /**
+            * Store a newly created resource in storage.
+            *
+            * @param \Illuminate\Http\Request $request
+            * @return \Illuminate\Http\Response
+            */
+            public function store(Request $request)
+            {
+            request()-&gt;validate([
+            &apos;title&apos; =&gt; [&apos;bail&apos;,&apos;required&apos;],
+            &apos;content&apos; =&gt; [&apos;bail&apos;,&apos;required&apos;, &apos;min:20&apos;],
+            ],[
+            &apos;content.min&apos; =&gt; &apos;Pour une raison de diffusion, votre message doit faire :min caract&egrave;res.&apos;
+            
+            ]);
+            
+            $post = new \App\Post;
+            $user = Auth::id();
+            $post-&gt;title = request(&apos;title&apos;);
+            $post-&gt;content = request(&apos;content&apos;);
+            $post-&gt;like = &quot;0&quot;;
+            $post-&gt;user_id = $user;
+            $post-&gt;save();
+            
+            return redirect(&apos;/home&apos;)-&gt;with(&quot;success&quot;,&quot;Votre message a bien &eacute;t&eacute;
+            envoy&eacute; !&quot;);
+            }
+            
+            /**
+            * Display the specified resource.
+            *
+            * @param \App\Post $post
+            * @return \Illuminate\Http\Response
+            */
+            public function show($id)
+            {
+            // nous demandons &agrave; la fonction de retourner le post ayant l&apos;id $id.
+            $posts = Post::find($id);
+            // nous allons chercher les donn&eacute;es de l&apos;user ayant l&apos;id correspondant &agrave; l&apos;id_user du post.
+            $user = User::find($posts-&gt;get(&apos;user_id&apos;));
+            // nous demandons la vue Post.show.blade.php, accompagner des 2 variables.
+            // compact est plus ou moins la m&ecirc;me chose que with(), l&apos;un c&apos;est php l&apos;autre laravel.
+            return view(&apos;Post.show&apos;,compact(&apos;user&apos;,&apos;posts&apos;));
+            }
+            
+            /**
+            * Show the form for editing the specified resource.
+            *
+            * @param \App\Post $post
+            * @return \Illuminate\Http\Response
+            */
+            public function edit($id)
+            {
+            $posts = Post::find($id);
+            $user = Auth::id();
+            return view(&apos;post/edit&apos;,compact(&apos;posts&apos;,&apos;user&apos;));
+            }
+            
+            /**
+            * Update the specified resource in storage.
+            *
+            * @param \Illuminate\Http\Request $request
+            * @param \App\Post $post
+            * @return \Illuminate\Http\Response
+            */
+            public function update(Request $request, $id)
+            {
+            $posts = Post::find($id);
+            $updatePost = Post::find($request-&gt;post_id);
+            $updatePost-&gt;title = $request-&gt;title;
+            $updatePost-&gt;content = $request-&gt;content;
+            $updatePost-&gt;update();
+            return redirect(&apos;Post/&apos; . $posts-&gt;id)-&gt;with(&apos;success_modify&apos;, &apos;Votre post a bien
+            &eacute;t&eacute; modifi&eacute; !&apos;);
+            
+            
+            }
+            
+            /**
+            * Remove the specified resource from storage.
+            *
+            * @param \App\Post $post
+            * @return \Illuminate\Http\Response
+            */
+            public function destroy($id)
+            {
+            $post = Post::find($id);
+            $post-&gt;delete($post-&gt;id);
+            return redirect(&apos;/home&apos;)-&gt;with(&quot;success&quot;,&quot;Votre post a bien &eacute;t&eacute;
+            supprim&eacute; !&quot;);
+            }
+            }
+
+         </pre>
+            </div>
+          </div>
+          <!-- --------------------fin accordeon  ------------------------- -->
+          <p>
+            Voilà qui clôture la partie des Postes. Nous avons appris a lister nos postes avec une paginations. A
+            modifier, sauver,updater et éffacer nos postes. Dans la prochaine partie nous allons nous occuper des
+            commentaires, puis nous allons peaufiner notre style et étoffer notre profil.
+          </p>
+          <p>
+            <a href="index3.html" class="alert-success">Passons à la suite...</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Workshop-Laravel</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>Laravel Workshop Project</h1>
+      <p class="contribution">Bacq E. - Gilotaux L. & Markus E.</p>
+    </header>
+    <div class="main-page">
+
+      <div class="row">
+        <div class="container">
+          <p>
+            Bienvenue à ce workshop dédié au framework Laravel. Nous allons pas revenir ici sur la genèse de Laravel
+            mais
+            nous allons vous proposer de vous immerger complètement via le coding. Pour suivre ce workshop il y a des
+            prérequis en ce qui concerne vos connaissances mais aussi en ce qui concerne votre ordinateur. Pour la
+            configuration de votre ordinateur vous pouvez suivre notre tutorial en suivant ce <a href="dfdsf">lien</a>.
+          </p>
+          <p>
+            En ce qui concerne les prérequis pour travailler avec Laravel, il faut avoir une certaine base en PHP et en
+            Programmation Orienté Objet (POO) mais rien d'insurmontable.
+          </p>
+          <p>
+            Pour une meilleur compréhension nous avons décidé d'introduire des codes couleur et de style.
+            <ul class="list-unstyled ml-5">
+              <li class="style-folder"> Ce style représente les chemins du fichier ou vous devrez faire vos
+                modifications. </li>
+              <li class="style-code"> Ce style représente les codes que vous devrez ajouter à votre fichier. </li>
+              <li class="style-console">ce style représente les commandes que vous devrez rentrer dans votre console.
+              </li>
+
+            </ul>
+
+          </p>
+
+          <p>Bon ! Vous êtes prêt ? Votre machine à tous les prérequis et vous avez passé tout les tests ?</p>
+          <p>Commençons alors !</p>
+          </p>
+        </div>
+        <!--  table des matières  -->
+        <div class="container the-index mt-3 ml-5">
+          Table des matières:
+          <ol class="ol-first">
+            <li>
+              <a href="index.html#section1" class="color-laravel">Création de notre projet</a>
+              <ol class="ol-sec">
+                <li><a href="index.html#section1a">configuration de notre projet</a></li>
+              </ol>
+            </li>
+            <li>
+              <a href="index.html#section2" class="color-laravel">La base (Eloquent & Migration)</a>
+              <ol class="ol-sec">
+                <li><a href="index.html#section2a">Les Models</a></li>
+                <li><a href="index.html#section3a">Les Factory</a></li>
+                <li><a href="index.html#section4a">Les Seeder</a></li>
+              </ol>
+            </li>
+            <li>
+              <a href="index2.html#section3" class="color-laravel">Les postes (Routes, Controller & Vue)</a>
+            </li>
+            <li>
+              <a href="index3.html#section4" class="color-laravel">Quelques ajutements</a>
+            </li>
+            <li>
+              <a href="index3.html#section5" class="color-laravel">Les Commentaires</a>
+            </li>
+            <li>
+              <a href="index3.html#section6" class="color-laravel">Le Profil</a>
+            </li>
+          </ol>
+        </div>
+        <!-- ---------------------------------- -->
+      </div>
+      <!-- section 1 -->
+      <div class="row">
+        <div class="container">
+          <p id="section1" class="section-title"> 1.Création de notre projet</p>
+          <p>Allez dans votre dossier de travail et pour ceux qui n'ont pas installé laravel en<i>global</i> vous pouvez
+            créer votre projet avec composer. Pour ça entrer la commande suivante: <p class="style-console">composer
+              create-project –prefer-dist laravel/laravel
+              blog</p>
+          </p>
+
+          <p>Pour ceux qui ont installé laravel en <i>Global</i> c'est celle-ci : <span class="style-console">laravel
+              new blog</span></p>
+          <p>
+            Il vous faudra attendre quelques minutes, le temps que tous les fichiers nécessaires à Laravel soient
+            déployés sur votre ordinateur. Mais si tout a fonctionné normalement, composer ou laravel à dû créer un
+            dossier « blog ». Entrez dedans ! Vous devriez avoir quelque chose de ce style.
+          </p>
+          <img src="assets/media/list-folder.PNG" />
+          <p>
+            Maintenant, nous pouvons tester le serveur de développement et pour ça nous allons utiliser artisan.
+            Artisan, est votre cli, votre ligne de commande.
+            Il suffit de se positionner dans le dossier racine et d’utiliser la commande : <span class="style-console">
+              php artisan</span> et vous aurez la page d'aide de cet outil. <span class="text-success"><a
+                href="https://laravel.com/docs/5.8/artisan" class="text-warning">Plus d'infos</a></span>
+          </p>
+          <p>Mais testons notre serveur en entrant la commande <span class="style-console">php artisan serve</span></p>
+          <p>Normalement la console vous renvoie ceci:</p>
+          <i>Laravel development server started: http://127.0.0.1:8000
+            [Wed Feb 19 00:24:12 2020] PHP 7.4.1 Development Server (http://127.0.0.1:8000) started</i>
+          <p class="mt-3">
+            Pour vérifier que tout est correcte rendons nous dans notre browser et tapez dans la barre d'adresse
+            127.0.0.1:8000 ! Normalement vous devriez avoir la homepage de laravel.<img
+              src="assets/media/homepage.png" />
+          </p>
+          <p id="section1a" class="section-subtitle"> 1.a Configuration de notre projet</p>
+          Dans notre projet laravel nous allons travaillons avec une base SQL ( n'oubliez pas de créer votre base de
+          donnée worklara soit via votre console ou votre phpmyadmin.), mais pour que notre projet y est accès
+          nous devons lui fournir les paramètres de cette dernière. Pour ça je vous invite à aller à la racine de votre
+          projet et nous allons éditer le fichier d'environnement avec notre éditeur de console. Ici nous employons NANO
+          mais libre à vous d'en employer un autre. N'oubliez pas de stopper votre serveur en faisant un control+c puis
+          éditons notre fichier en faisant la commande suivante <span class="style-console">nano .env</span></p>
+          <p>
+            Nous allons renseigner les lignes suivantes.
+            <ul class="list-unstyled">
+              <li class="style-code">APP_NAME=Workshop <span class="ml-1 text-secondary">#Le nom de notre
+                  application</span></li>
+              <li class="style-code">DB_CONNECTION=mysql <span class="ml-1  text-secondary">#Le type de connection à la
+                  base</span></li>
+              <li class="style-code">DB_HOST=127.0.0.1<span class="ml-1  text-secondary">#L'adresse du host</span></li>
+              <li class="style-code">DB_PORT=3306<span class="ml-1  text-secondary">#Le port d'écoute de votre
+                  mysql</span></li>
+              <li class="style-code">DB_DATABASE=worklara<span class="ml-1 text-secondary">#Le nom de la base de
+                  donnée</span></li>
+              <li class="style-code">DB_USERNAME=laravel<span class="ml-1 text-secondary">#Le user de votre base de
+                  donnée</span></li>
+              <li class="style-code">DB_PASSWORD=laravel<span class="ml-1 text-secondary">#Le mot de passe de votre base
+                  de</span></li>
+            </ul>
+          </p>
+          <p>
+
+            Une fois les modifications apporté, sauvez votre fichier et relancer votre serveur avec artisan : <span
+              class="style-console">php artisan serve</span>
+          </p>
+        </div>
+      </div>
+      <!-- section 2 -->
+      <div class="row">
+        <div class="container">
+          <p id="section2" class="section-title"> 2. Eloquent & Migrations</p>
+
+          <p>
+            Dans ce chapitre nous allons parler de base de données. Une application quelle qu'elle soit, nécessite pour
+            la plupart du temps de travailler avec des données stockées. Et tout les programmeurs connaissent cet
+            exercice récurrent qu'est le CRUD. Laravel nous 'facilite' l'exercice grâce à <span
+              class="text-secondary uppercase">Eloquent</span>. <span class="text-secondary uppercase">ELOQUENT</span>
+            est un ORM (Object-Relationnal-Mapping). En bref, c'est un ensemble de class qui vont nous permettre de
+            travailler avec les tables de données comme si elles était des objets.
+            C'est cette ORM qui va s'occuper de faire les requêtes. Vous allez vite comprendre car nous allons de ce pas
+            nous immerger dans ces tables en commençant nos migrations.
+            <p class="mt-2">mais c'est quoi une Migration ?</p>
+            <p class="mt-2">
+              Une migration permet de mettre à jour votre base de données, que cela soit pour créer, modifier, ou
+              supprimer un colonne, une table. On créer un fichier de migration par table. Si par exemple vous allez
+              dans votre dossier <span class="style-folder"> Database/</span>, vous pouvez voir 3 dossiers
+              (factories,migrations et seed). Entrons dans le dossier <span class="style-folder">migrations</span>. Nous
+              pouvons remarquez qu'il y a déjà 3 fichiers présents. Leur nom sont explicites. Ses fichiers sont là pour
+              l'authentification, présent jusqu'à Laravel 5 mais depuis la version 6 nous devons charger une extension
+              pour pouvoir travailler avec un système d'authentification.
+            </p>
+            <p>
+              Mais nous éloignons pas du sujet, notre projet contiendra 3 tables, une table users, une table posts et
+              une table comments. C'est trois table devront être relié entre elles. Et c'est là que ELOQUENT nous sera
+              utile, et rapide comme une -> . Mais commençons ! et retournons dans notre console artisan.
+            </p>
+            <p>
+              Chargeons le package d'authentification: <span class="style-console">composer require laravel/ui
+                --dev</span>.
+            </p>
+            <p>
+              une fois installer vous pouvez faire un <span class="style-console">php artisan ui --help</span>. Vous
+              remarquerez que disposez de 3 presets pour l'échafaudage de vos vues. (bootstrap/vue/et react !). Pour un
+              soucis de facilité et surtout de rapidité de notre style, nous allons choisir bootstrap. Nous continuons
+              en entrant la commande suivante. <span class="style-console"> php artisan ui bootstrap --auth</span> et
+              nous finissons en compilant le tout via cette commande <span class="style-console">npm install && npm
+                run dev</span>. <p class="text-dark bg-warning">DIA11->DIA22</p> Cette dernière va prendre un
+              certain
+              temps, pendants
+              ce temps je vous laisse faire ' le
+              tour du propriétaire ' et regarder par exemple dans les routes en ouvrant une nouvelle console dans et à
+              la
+              racine faite un <span class="style-console">php artisan route:list</span>
+            </p>
+            <img src="assets/media/route_auth.PNG">
+            <p class="mt-2">
+              On peut déjà voir les routes que notre extension à installer, et profitons en pour voir ça de plus prêt.
+              Nous remarquons que sur chaque route nous avons une méthode (get ou post) mais vous verrais plus loin
+              qu'il y a d'autre type de méthode que nous allons employer. Nous avons ensuite l'URI, qui est la route
+              telle que nous la trouverons dans notre barre d'adresse, suivie de son nom. Il est intéressant de pouvoir
+              nommer ses routes. Imaginez que pour une raison X ou Y nous devons changer les routes, que un
+              <i>/home/article</i> devienne un <i>/home/post</i>, par je ne sais quelle convention. Nous devrions aller
+              dans chaque page et changer nos routes. Si vous nommez vos routes, vous n'aurez qu'à effectuer vos
+              changement de route dans le fichier <span class="style-folder">routes/web.php</span>. La colonne suivante,
+              comme son nom l'indique, contient l'action qui sera appelé une fois dans cette route (nous verrons plus
+              tard en détail). Pour finir le middleware...On appel une sorte de filtre, par exemple, celui qu'on vient
+              d'installer Auth. En gros le middleware Auth qu'on appel va faire des vérifications, si on est logés ou
+              pas et le cas échéant réaliser une redirection vers un formulaire d'inscription ou de login. Mais on peut
+              imaginer pour un blog, réaliser un middleware qui va vérifier si vous êtes admin ou rédacteur ou encore si
+              une requête contient du code ajax ou json. Bref ça vous permet de faire des chose répétitive sans pour
+              autant devoir le refaire ou y pensez à chaque fois.
+            </p>
+            <p>Voilà notre package installé et compilé. Entrons dans le vif du sujet et dans la migration.</p>
+            <p>
+              <p class="text-dark bg-warning">DIA 23->25
+              </p>
+              Nous allons tout d'abord créer notre table 'posts' et 'comments', pour ça retour en console et <span
+                class="style-console">php artisan make:Model -a Post</span> suivi d'un <span class="style-console">php
+                artisan make:Model -a Comment</span> . Que venons-nous de faire ? Comme indiqué
+              après la fin de la commande, nous venons de demander à artisan de créer un model, un factory,un fichier
+              migartion, un seeder et notre controller. Tout ça en une commande. Cool non ?
+            </p>
+            <p>
+              Nous allons maintenant définir notre table user.
+              <span class="style-folder">
+                Open->database/migrations/*_create_users_table.php
+              </span>
+            </p>
+            <p>
+              Nous remarquons que nous avons deux fonctions (up/down), la première est utilisé lors de la migration et
+              la deuxième lors d'un <i><u>artisan migrate:rollback</u></i>. Le rollback permet de revenir en arrière et
+              ce autant de fois que l'on souhaite.
+
+              Nous allons maintenant modifier notre fonction 'up' pour qu'elle reflète mieux ce que l'on souhaite dans
+              notre table user.
+            </p>
+            <!-- accordeon modif user migration -->
+            <p>
+              <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#usermigration"
+                aria-expanded="false" aria-controls="usermigration">
+                Code final : /database/migrations/*_create_users_table.php
+              </button>
+            </p>
+            <div class="collapse" id="usermigration">
+              <div class="card card-body">
+                <pre class="pre-line style-code">
+                public function up()
+                {
+                Schema::create('users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('firstname');
+                $table->string('avatar_url')->default('user.jpg');
+                $table->string('email')->unique();
+                $table->string('password');
+                <i>$table->rememberToken();</i>
+                <i>$table->timestamps();</i>
+                });
+                }</pre>
+              </div>
+            </div>
+            <!-- --------------------fin accordeon  ------------------------- -->
+            <p>
+              Nous avons deux champs à ne pas toucher c'est rememberToken (qui sert au session / cookies) et timestamps
+              qui va ajouter dans notre table user la date d'inscription et la date de modification d'un profile.
+              <p>Nous allons passer à notre table password resets.
+                <p><span class="style-folder">
+                    Open-> database/migrations/*_create_password_resets_table.php
+                  </span> nous retirons juste l'option nullable de notre timestamp.</p>
+              </p>
+            </p>
+            <!-- accordeon modif resets migration -->
+            <p>
+              <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                data-target="#resetmigration" aria-expanded="false" aria-controls="resetmigration">
+                Code final : /database/migrations/*_create_password_resets_table.php
+              </button>
+            </p>
+            <div class="collapse" id="resetmigration">
+              <div class="card card-body">
+                <pre class="pre-line style-code">
+                  public function up()
+                  {
+                      Schema::create('password_resets', function (Blueprint $table) {
+                          $table->string('email')->index();
+                          $table->string('token');
+                          $table->timestamp('created_at');
+                      });
+                  }
+               </pre>
+              </div>
+            </div>
+            <!-- --------------------fin accordeon  ------------------------- -->
+            <p>
+              Dans notre table posts. <span class="style-folder">
+                Open->database/migrations/*_create_posts_table.php</span>
+            </p>
+            <!-- accordeon modif posts migration -->
+            <p>
+              <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postmigration"
+                aria-expanded="false" aria-controls="postmigration">
+                Code final : /database/migrations/*_create_posts_table.php
+              </button>
+            </p>
+            <div class="collapse" id="postmigration">
+              <div class="card card-body">
+                <pre class="pre-line style-code">
+                  public function up()
+                  {
+                      Schema::create('posts', function (Blueprint $table) {
+                          $table->increments('id');
+                          $table->string('title',300);
+                          $table->text('content');
+                          $table->integer('like');
+                          $table->integer('user_id')->unsigned();
+                          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+                          $table->timestamps();
+                      });
+                  }
+               </pre>
+              </div>
+            </div>
+            <!-- --------------------fin accordeon  ------------------------- -->
+            <p>
+              Avez-vous remarqué quelque choses de bizarre ? Oui ? <span
+                class="style-code">$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');</span>.
+            </p>
+            <p>Quelques explications s'impose.</p>
+            <p>Nous savons que chaque utilisateur aura plusieurs 'post', et pour savoir à qui appartient le post nous
+              avons rajouté dans notre table posts, une variable "user_id" qui correspond au 'id' de la table "user". Et
+              bien c'est ce que l'on déclare ici. Nous signifions à la table de données une relation direct entre la
+              base
+              "posts" et "users". Que 'user_id' fait référence à 'id' dans la table (users) et on lui rajoute la méthode
+              'Delete' en cascade. Cela signifie que si nous effaçons l'user, et bien tout les enregistrements se
+              trouvant dans la table 'posts' comportant l' 'user_id' designé doit être effacés.
+            </p>
+
+            <p>Passons à la table des commentaires.</p>
+            <!-- accordeon modif migrationComments.php -->
+            <p>
+              <button class="btn btn-primary btn-code" type="button" data-toggle="collapse"
+                data-target="#migrationComment" aria-expanded="false" aria-controls="migrationComment">
+                Code final : /database/migrations/*_create_comments_table.php
+              </button>
+            </p>
+            <div class="collapse" id="migrationComment">
+              <div class="card card-body">
+                <pre class="pre-line style-code">
+                  <!--content  -->
+                  Schema::create('comments', function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->mediumText('content');
+                    $table->integer('user_id')->unsigned();
+                    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+                    $table->integer('post_id')->unsigned();
+                    $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');                    
+                    $table->timestamps();
+                });
+
+             </pre>
+              </div>
+            </div>
+            <!-- --------------------fin accordeon  ------------------------- -->
+          </p>
+
+          <p>
+            Voilà nous avons fini de paramètrer la création de nos 4 tables. Lançons notre première migration depuis
+            notre console.
+            <span class="style-console">php artisan migrate</span>. Vous devriez avoir quelques chose du genre
+            <img src="assets/media/migration.png">
+          </p>
+          <p>
+            Et vous pouvez vérifier dans votre phpmyadmin la création des table et de la foreign key.
+            <img src="assets/media/1eremigration_foreign.png">
+          </p>
+        </div>
+      </div>
+      <p class="text-dark bg-warning">DIA 26 </p>
+      <!--  section 2 A -->
+      <p id="section2a" class="section-subtitle"> 2.a Eloquent & Migrations / Les Models</p>
+      <p>
+        Allons voir d'abord le Model 'User' : <span class="style-folder">Open -> app\User.php</span>
+      </p>
+      <p>
+        Ce que nous remarquons c'est que d'origine, Laravel est assez verbeux. On va pas s'en plaindre ! C'est des
+        indications utile lorsqu'on début avec ce framework. Que trouvons nous ?
+      </p>
+      <pre>
+        protected $fillable : désigne les attributs pouvant être assignés en masse.
+        protected $hidden   : désigne les attributs omis dans la sérialisation du modèle.
+        protected $casts    : désigne les attributs devant être convertis en types natifs (v5.0)
+      </pre>
+      <p>
+        Etant donné que nous avons rajouter des variables à notre table user nous allons les ajouter dans les
+        attributs
+        pouvant être assignés en masse. De plus nous allons lui ajouter une fonction 'posts' qui en gros va juste
+        dire
+        que chaque utilisateur à plusieurs posts. La relation 1 To Many.
+      </p>
+      <!-- accordeon modif user Model -->
+      <p>
+        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#userModel"
+          aria-expanded="false" aria-controls="userModel">
+          Code final : /app/User.php
+        </button>
+      </p>
+      <div class="collapse" id="userModel">
+        <div class="card card-body">
+          <pre class="pre-line style-code">
+            &lt;?php
+            namespace App;
+
+            use Illuminate\Contracts\Auth\MustVerifyEmail;
+            use Illuminate\Foundation\Auth\User as Authenticatable;
+            use Illuminate\Notifications\Notifiable;
+
+            class User extends Authenticatable
+            {
+                use Notifiable;
+
+                /**
+                * The attributes that are mass assignable.
+                *
+                * @var array
+                */
+                protected $fillable = [
+                    'name', 'firstname','email', 'password',
+                ];
+
+                public function posts(){
+                    return $this->hasMany(Post::class);
+                }
+                /**
+                * The attributes that should be hidden for arrays.
+                *
+                * @var array
+                */
+                protected $hidden = [
+                    'password', 'remember_token',
+                ];
+
+                /**
+                * The attributes that should be cast to native types.
+                *
+                * @var array
+                */
+                protected $casts = [
+                    'email_verified_at' => 'datetime',
+                ];
+            }
+         </pre>
+        </div>
+      </div>
+      <!-- --------------------fin accordeon  ------------------------- -->
+      <p>
+        De la même façon, nous allons aller dans le Model posts : <span class="style-folder">Open ->
+          app\Post.php</span>.
+      </p>
+      <!-- accordeon modif Post Model -->
+      <p>
+        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postModel"
+          aria-expanded="false" aria-controls="postModel">
+          Code final : /app/Post.php
+        </button>
+      </p>
+      <div class="collapse" id="postModel">
+        <div class="card card-body">
+          <pre class="pre-line style-code">
+            &lt;?php
+            namespace App;
+
+            use Illuminate\Database\Eloquent\Model;
+
+            class Post extends Model
+            {
+              protected $fillable = ['title','content','like','user_id'];
+
+              /* un post appartient à un user donc ont relie via la relation belongsTo */
+              public function User(){
+                  return $this->belongsTo(User::class);
+              }
+              /* un post peut posséder plusieurs commentaires ont relie via la relation hasMany */
+              public function comments(){
+                  return $this->hasMany(Comment::class);
+              }
+            }
+         </pre>
+        </div>
+      </div>
+      <!-- --------------------fin accordeon  ------------------------- -->
+      <p>
+        Ici nous créons une fonction User qui définit une relation inverse du 1 to Many, qui en Laravel se traduit
+        par
+        <span class="style-class"> belongsTo </span>. Mais en quoi ça va nous simplifier la vie tout ça ? Et bien,
+        lorsque nous allons afficher nos posts et que nous souhaitons afficher le nom ou le mail de la personne ayant
+        posté le message, il nous suffira de faire une fonction du type
+        <p>$postUserName = $Post()->user->name . </p>
+        Et nous aurons le nom tout simplement ! <a href="https://laravel.com/docs/4.2/eloquent#relationships"><u>Plus
+            d'informations sur les relations entres les tables en laravel </u></a>
+      </p>
+
+      <p>
+        Et pour finir le Model Comment : <span class="style-folder">Open -> /app/Comment.php </span>
+      </p>
+      <!-- accordeon modif app/comment -->
+      <p>
+        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#commentModel"
+          aria-expanded="false" aria-controls="commentModel">
+          Code final : app\Comment.php
+        </button>
+      </p>
+      <div class="collapse" id="commentModel">
+        <div class="card card-body">
+          <pre class="pre-line style-code">
+            <!--content  -->
+            &lt;?php
+
+              namespace App;
+
+              use Illuminate\Database\Eloquent\Model;
+
+              class Comment extends Model
+              {
+                  // les donn&eacute;es qui sont requis pour la base de donn&eacute;es
+                  protected $fillable = [&apos;content&apos;,&apos;user_id&apos;, &apos;post_id&apos; ];
+
+                  /* un commentaire appartient &agrave; une user et employons donc la methode belongsTo*/
+                  public function User() {
+                      return $this-&gt;belongsTo(User::class);
+                  }
+
+                  /* un commentaire appartient &agrave; un post */
+                  public function post(){
+                      return $this-&gt;belongsTo(Post::class);
+                  }
+              }
+
+          
+         </pre>
+        </div>
+      </div>
+      <!-- --------------------fin accordeon  ------------------------- -->
+      <p class="text-dark bg-warning">DIA 27-28 </p>
+      <!--  section 3 A -->
+      <p id="section3a" class="section-subtitle"> 2.b Eloquent & Migrations / Les Factory</p>
+      <p>
+        Les factory sont nos usines à data, elles peuvent nous créer des données random, mais Laravel nous apporte
+        aussi
+        la class Faker ! Comme sont nom l'indique, cette class va nous permettre de créer de fausses données mais en
+        plus
+        on pourra lui dire quelle type de données ce qui nous permettra de faire des tests
+        rapidement sans se fatiguer à les créer. Voyons comment ça marche et ouvrons sans tarder le factory du model
+        User qui à été
+        créer automatiquement lors de son installation.
+        <p><span class="style-folder"> Open -> database\factories\UserFactory.php </span></p>
+        Nous voyons que la class <a href="https://github.com/fzaninotto/Faker"><span
+            class="style-class">Faker\Generator</span></a> est appelé ainsi que la class <a
+          href="https://laravel.com/docs/5.8/helpers"></a><span class="style-class">Str</span></a> qui possèdent une
+        fonction random. nous allons modifier notre factory en fonction de notre fichier migration.
+      </p>
+      <!-- accordeon modif User factory -->
+      <p>
+        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#userfactory"
+          aria-expanded="false" aria-controls="userfactory">
+          Code final : database\factories\UserFactory.php
+        </button>
+      </p>
+      <div class="collapse" id="userfactory">
+        <div class="card card-body">
+          <pre class="pre-line style-code">
+            &lt?php
+
+            /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+            use App\User;
+            use App\post;
+            use Faker\Generator as Faker;
+            use Illuminate\Support\Str;
+            
+            /*
+            |--------------------------------------------------------------------------
+            | Model Factories
+            |--------------------------------------------------------------------------
+            |
+            | This directory should contain each of the model factory definitions for
+            | your application. Factories provide a convenient way to generate new
+            | model instances for testing / seeding your application's database.
+            |
+            */
+            
+            $factory->define(User::class, function (Faker $faker) {
+            return [
+            'name' => $faker->name,
+            'firstname' => $faker->firstName,
+            'avatar_url' => "user.jpg",
+            'email' => $faker->unique()->safeEmail,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
+            ];
+            });
+
+         </pre>
+        </div>
+      </div>
+      <!-- --------------------fin accordeon  ------------------------- -->
+      <p>
+        Nous allons maintenant faire de même avec notre post factory. <span
+          class="style-folder">Open->database\factories\PostFactory.php</span>
+      </p>
+      <!-- accordeon modif Post factory -->
+      <p>
+        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#postFactory"
+          aria-expanded="false" aria-controls="postFactory">
+          Code final : database\factories\PostFactory.php
+        </button>
+      </p>
+      <div class="collapse" id="postFactory">
+        <div class="card card-body">
+          <pre class="pre-line style-code">
+            <!--content  -->
+            &lt?php
+
+            /** @var \Illuminate\Database\Eloquent\Factory $factory */
+            use App\User;
+            use App\Post;
+
+
+            use Faker\Generator as Faker;
+
+            $factory->define(Post::class, function (Faker $faker) {
+                return [
+                    'title' => $faker->text($maxNbChars=150),
+                    'content' => $faker->paragraph($nbSentences = 6, $variableNbSentences = true),
+                    'like' => $faker->numberBetween($min=1,$max=300)
+                ];
+            });
+          
+         </pre>
+        </div>
+      </div>
+      <!-- --------------------fin accordeon  ------------------------- -->
+      <p>
+        Nous DEVONS appeler ici la class User et elle DOIT précéder la class Post sinon nous aurons des erreurs plus
+        tard. Vous avez remarquez que nous n'avons pas créer de data pour les user ! Rappelez-vous que chaque post
+        doit
+        avoir un user_id relié à un id de la table User. Alors vous vous demandez comment et où on va faire cela et
+        bien
+        c'est dans le seeder. Notre prochain sujet...
+      </p>
+
+      <p>
+        Modifions notre dernier Factory, <span class="style-folder">Open ->
+          database\factories\CommentFactory.php</span>
+      </p>
+      <!-- accordeon modif Commentfactory -->
+      <p>
+        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#commentFactory"
+          aria-expanded="false" aria-controls="commentFactory">
+          Code final : database\factories\CommentFactory.php
+        </button>
+      </p>
+      <div class="collapse" id="commentFactory">
+        <div class="card card-body">
+          <pre class="pre-line style-code">
+            <!--content  -->
+            &lt?php
+            /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+            use App\Comment;
+            use Faker\Generator as Faker;
+
+            $factory->define(Comment::class, function (Faker $faker) {
+                return [
+                    'content'=>$faker->paragraph(20, false)
+                ];
+            });   
+         </pre>
+        </div>
+      </div>
+      <!-- --------------------fin accordeon  ------------------------- -->
+      <p class="text-dark bg-warning">DIA 29 -> 31 </p>
+      <!--  section 4 A -->
+      <p id="section4a" class="section-subtitle"> 2.c Eloquent & Migrations / Les Seeder</p>
+      <p>
+        Les seeders sont les fichiers qui vont remplir au sens propre notre base de données. Généralement pour avoir
+        un meilleur contrôle, nous devrions créer un fichier pour chaque table. Si vous allez dans le dossier <span
+          class="style-folder">database\factories</span> vous trouverez notre fichier <i>postSeeder.php</i>. Vous
+        voyez aussi le fichier <i>DatabaseSeeder.php</i> dans ce fichier vous pouvez appeler tout les fichier du seeds
+        ou en
+        grouper certain ce qui nous obligera pas à appeler via artisan chaque fichier seeds. Et c'est cette méthode
+        que l'on va choisir pour notre projet. dès lors nous n'avons pas besoin de notre fichier <i>postSeeder.php</i>
+        et
+        vous pouvez l'éffacer ou le renommer (méthode que je préfère, no destruction <i class="far fa-smile"></i> ).
+      </p>
+      <p>Ouvrons notre fichier : <span class="style-folder">Open => database\seeds\DatabaseSeeder.php</span></p>
+
+      <!-- accordeon modif DatabaseSeeder.php -->
+      <p>
+        <button class="btn btn-primary btn-code" type="button" data-toggle="collapse" data-target="#databaseSeeder"
+          aria-expanded="false" aria-controls="databaseSeeder">
+          Code final : database\seeds\DatabaseSeeder.php
+        </button>
+      </p>
+      <div class="collapse" id="databaseSeeder">
+        <div class="card card-body">
+          <pre class="pre-line style-code">
+                  <!--content  -->
+                  &lt;?php
+                    use Illuminate\Database\Seeder;
+
+                    use App\User;
+                    use App\Post;
+                    use App\Comment;
+
+                    class DatabaseSeeder extends Seeder
+                    {
+                        /**
+                        * Seed the application&apos;s database.
+                        *
+                        * @return void
+                        */
+                        public function run()
+                        {
+                            // $this-&gt;call(UsersTableSeeder::class);
+                            factory(User::class, 5)-&gt;create()-&gt;each(function($user) {
+                            factory(Post::class, rand(1,2))-&gt;create([&apos;user_id&apos; =&gt; $user-&gt;id])
+                                -&gt;each(function($post) use ($user){
+                                    factory(Comment::class, rand(1,2))-&gt;create([
+                                        &apos;user_id&apos; =&gt; $user-&gt;id,
+                                        &apos;post_id&apos; =&gt; $post-&gt;id
+                                    ]);
+                                });
+                            });
+
+                        }
+                    }
+                  </pre>
+        </div>
+      </div>
+      <!-- --------------------fin accordeon  ------------------------- -->
+      <p>
+        Regardons de plus prêt notre code. Tout d'abord nous appelons nos deux class, User et Post. Puis nous
+        appelons
+        le factory User et nous lui demandons de créer 5 enregistrements. Nous lui donnons la méthode create (qui
+        créer
+        mais va aussi réaliser une sauvegarde dans la base). Nous lui disons par la suite que pour chaque user créer
+        nous allons sauver plusieurs posts, créer grâce à l'appel du factory Post où là encore nous lui demandons de
+        faire un random de 2 à 5 posts. Nous finissons le tout avec la function make() qui va retourner notre nouvelle
+        élément.
+      </p>
+      <p>
+        Il nous restes plus qu'à tester le tout en lançant notre commande qui va lancer la créations de nos faux data.
+        <span class="style-console">php artisan migrate:fresh --seed</span>
+      </p>
+      <p>
+        Lorsqu'on commet une erreur avec les migrations on peut toujours faire un <span class="style-console">php
+          artisan migrate:rollback</span> ou pour vider vos tables un <span class="style-console">php artisan
+          migrate:refresh</span>.
+      </p>
+
+      <p>Nous avons fini avec la section base de données pour l'instant, dans le prochain chapitre nous allons vous
+        parler des routes, des controller et de leurs viewer sans oublier Blade <img
+          src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a504c732-2487-47cd-9380-d08f32a02454/daoubkd-f6bfd28b-9132-4103-aa84-bd1db5d7b9a7.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2E1MDRjNzMyLTI0ODctNDdjZC05MzgwLWQwOGYzMmEwMjQ1NFwvZGFvdWJrZC1mNmJmZDI4Yi05MTMyLTQxMDMtYWE4NC1iZDFkYjVkN2I5YTcucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.08L05LXN_B3sdRtPYy0RB3GxJWgYvjq4R5KPogSiJUI">
+        <a href="index2.html" style="color:#F34E39"><u>2ème Parties >></u></a></p>
+
+    </div>
+  </div>
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

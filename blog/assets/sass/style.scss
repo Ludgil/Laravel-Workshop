@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro:400,400i|Roboto:400,500|Tomorrow&display=swap');
+
+$color-back  :#4D588F;
+$color-code  :rgb(0, 155, 13);
+$color-folder:#0c68d1;
+$laravel-color : #F34E39;
+$default-color:#202020;
+
+.color-laravel{
+    color:$laravel-color;
+}
+
+.section-title {
+    color:$laravel-color;
+    font-size: 1.5rem;
+}
+.section-subtitle {
+    color:$laravel-color;
+    font-size: 1.1rem;
+}
+
+body {
+    size       : 1.2rem;
+    font-family: 'Roboto', sans-serif;
+    color:rgb(32, 32, 32);
+    a {
+        text-decoration: none;
+        color:$default-color;
+        }
+        img{
+            padding:0.5rem;
+        }
+}
+
+
+.style-folder {
+    color      : $color-folder;
+    font-family: 'Tomorrow', sans-serif;
+    font-weight:bold;
+}
+
+.style-code {
+    color      : $color-code;
+    font-family: 'Anonymous Pro', monospace;
+    
+}
+.style-console{
+    color:#fff;
+    background-color:$default-color;
+    display:inline;
+    font-family: 'Anonymous Pro', monospace;
+    padding:0.2rem;
+}
+ol.ol-first {
+    font-size:1rem;
+}
+ol.ol-sec{
+    list-style-type: lower-alpha;
+    font-size:0.8rem;
+}
+.uppercase {
+    text-transform: uppercase;
+}
+span {
+    word-break: keep-all;
+    white-space: nowrap;
+}
+.wrapper {
+    width:90%;
+    margin:auto;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    header {
+        margin-top:2rem;
+        h1 {
+            color:$laravel-color;
+        }
+        .contribution {
+            float:right;
+            font-size:0.8rem;
+        }
+    }
+    .main-page{
+        margin-top:5rem;
+        width:75%;
+        .list-sq{
+            list-style-type: circle;;
+        }
+    }
+}
+
+/* collapse  style */
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+  }
+  
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .active, .collapsible:hover {
+    background-color: rgb(199, 195, 195);
+  }
+  
+pre {
+    margin-left: 0;
+    white-space: pre-wrap;
+    padding-left:0 !important;
+}
+.btn-code {
+    width:100%;
+    background-color:$color-code;
+}
+img {
+    max-width:100%;
+}
+.collapse {
+    padding:0;
+    margin:0;
+}
+.card-body {
+    padding:0 2vw;
+}
+.style-class {
+    color:$laravel-color;
+}
